@@ -96,14 +96,35 @@ function parseRSS(xml) {
       return mm ? (mm[1] || mm[2] || '').trim() : '';
     };
 
+    // Try to extract image URL from description or media tags
+    const desc   = get('description');
+    let imageUrl = '';
+    
+    // 1. Check description <img> src
+    const imgMatch = /<img[^>]+src=["']([^"']+)["']/i.exec(desc);
+    if (imgMatch && imgMatch[1]) {
+      imageUrl = imgMatch[1];
+    }
+    
+    // 2. Check media:content url="..." tag
+    if (!imageUrl) {
+      const mediaMatch = /<media:content[^>]+url=["']([^"']+)["']/i.exec(block);
+      if (mediaMatch && mediaMatch[1]) {
+        imageUrl = mediaMatch[1];
+      }
+    }
+
+    if (imageUrl && imageUrl.startsWith('//')) {
+      imageUrl = 'https:' + imageUrl;
+    }
+
     const title   = get('title');
     const link    = get('link') || get('guid');
     const pubDate = get('pubDate');
-    const desc    = get('description');
     const source  = get('source');
 
     if (title && link) {
-      items.push({ title, link, pubDate, description: desc, source });
+      items.push({ title, link, pubDate, description: desc, source, imageUrl });
     }
   }
   return items;
@@ -112,6 +133,16 @@ function parseRSS(xml) {
 // ============================================================
 // Clean and transform RSS item → news object
 // ============================================================
+const CATEGORY_IMAGES = {
+  rutas:       'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80',
+  precios:     'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80',
+  incidentes:  'https://images.unsplash.com/photo-1520437358207-3df7e22434cd?auto=format&fit=crop&w=800&q=80',
+  expansion:   'https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=80',
+  social:      'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80',
+  opinion:     'https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=800&q=80',
+  operaciones: 'https://images.unsplash.com/photo-1495313587906-2cb34be0027f?auto=format&fit=crop&w=800&q=80'
+};
+
 function transformItem(raw) {
   // Google News wraps title as "Headline - Source"
   const titleFull = decodeEntities(raw.title || '');
@@ -122,6 +153,9 @@ function transformItem(raw) {
   const excerpt   = decodeEntities(stripTags(raw.description || '')).slice(0, 220).trim();
   const category  = autoCategory(title + ' ' + excerpt);
   const sentiment = autoSentiment(title + ' ' + excerpt);
+  
+  // Use parsed image or a beautiful high-quality fallback based on category
+  const image = raw.imageUrl || CATEGORY_IMAGES[category] || CATEGORY_IMAGES['operaciones'];
 
   return {
     id:       Math.random().toString(36).slice(2),
@@ -132,6 +166,7 @@ function transformItem(raw) {
     rawDate:  raw.pubDate ? new Date(raw.pubDate).toISOString() : new Date().toISOString(),
     url:      raw.link,
     sentiment,
+    image,
     popular:  Math.floor(Math.random() * 900) + 50
   };
 }

@@ -21,7 +21,8 @@ const state = {
   visibleCount:  12,
   isDark:        true,
   allNews:       [],
-  loading:       true
+  loading:       true,
+  currentCommentFilter: 'all'
 };
 
 // ============================================================
@@ -112,6 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderLoadingSkeleton();
   renderComments();
   initFilters();
+  initCommentFilters();
   initSearch();
   initViewToggle();
   initSort();
@@ -343,7 +345,7 @@ function createNewsCard(news, isFeatured = false, extraClass = '') {
              aria-label="${escapeAttr(news.title)}"
              title="Clic para leer en ${escapeAttr(news.source)}">
       <div class="card-img-wrap">
-        <div class="card-emoji-thumb" aria-hidden="true">${news.emoji}</div>
+        <img class="card-img" src="${escapeAttr(news.image)}" alt="${escapeAttr(news.title)}" loading="lazy" />
         <div class="card-read-overlay"><span>Leer artículo completo →</span></div>
       </div>
       <div class="card-body">
@@ -393,7 +395,22 @@ function addCardListeners() {
 function renderComments() {
   const grid = $('comments-grid');
   if (!grid) return;
-  grid.innerHTML = COMMENTS_DATA.map((c, i) => `
+
+  // Filter based on selected sentiment
+  const filtered = COMMENTS_DATA.filter(c => {
+    if (state.currentCommentFilter === 'all') return true;
+    return c.sentiment === state.currentCommentFilter;
+  });
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div style="text-align:center;padding:32px 16px;color:var(--text-muted);font-size:12px;">
+        💬 No hay comentarios con este sentimiento.
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map((c, i) => `
     <article class="comment-card reveal"
              id="comment-${c.id}"
              style="animation-delay:${i * 0.08}s"
@@ -431,6 +448,65 @@ function renderComments() {
         if (url) window.open(url, '_blank', 'noopener,noreferrer');
       }
     });
+  });
+}
+
+// ============================================================
+// COMMENT FILTERS BINDINGS (Linked with statistics cards)
+// ============================================================
+function initCommentFilters() {
+  // Bind sidebar buttons
+  $$('.c-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      $$('.c-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.currentCommentFilter = btn.dataset.cfilter;
+      
+      // Update statistics cards active states
+      updateActiveStatCard();
+      renderComments();
+    });
+  });
+
+  // Bind stats cards to work as filters too
+  const statsMap = { 'sc-pos': 'pos', 'sc-neg': 'neg', 'sc-neu': 'neu' };
+  Object.keys(statsMap).forEach(id => {
+    const cardEl = $(id);
+    if (cardEl) {
+      cardEl.classList.add('interactive');
+      cardEl.addEventListener('click', () => {
+        const sentiment = statsMap[id];
+        
+        // Handle toggle off if clicking active one
+        if (state.currentCommentFilter === sentiment) {
+          state.currentCommentFilter = 'all';
+        } else {
+          state.currentCommentFilter = sentiment;
+        }
+
+        // Sync pill buttons in sidebar
+        $$('.c-filter-btn').forEach(b => {
+          b.classList.toggle('active', b.dataset.cfilter === state.currentCommentFilter);
+        });
+
+        updateActiveStatCard();
+        renderComments();
+
+        // Scroll smoothly to comments section on mobile
+        $('comentarios').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+  });
+}
+
+function updateActiveStatCard() {
+  const statsMap = { pos: 'sc-pos', neg: 'sc-neg', neu: 'sc-neu' };
+  Object.keys(statsMap).forEach(sentiment => {
+    const cardId = statsMap[sentiment];
+    const el = $(cardId);
+    if (el) {
+      el.classList.toggle('active', state.currentCommentFilter === sentiment);
+    }
   });
 }
 
