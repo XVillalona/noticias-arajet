@@ -6,20 +6,9 @@
 'use strict';
 
 // ============================================================
-// CONFIG — Feeds de Google News (3 fuentes)
+// CONFIG
 // ============================================================
-const RSS_FEEDS = [
-  'https://news.google.com/rss/search?q=arajet&hl=es-419&gl=DO&ceid=DO:es-419',
-  'https://news.google.com/rss/search?q=arajet+aerolinea&hl=es&gl=ES&ceid=ES:es',
-  'https://news.google.com/rss/search?q=arajet+airline&hl=en-US&gl=US&ceid=US:en'
-];
-
-// Proxies CORS en orden de prioridad (fallback automático)
-const CORS_PROXIES = [
-  url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-  url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
-  url => `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`
-];
+const NEWS_API = '/api/news'; // Server-side proxy — sin CORS
 
 // ============================================================
 // STATE
@@ -134,139 +123,42 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ============================================================
-// FETCH NEWS — multi-proxy con fallback automático
+// FETCH NEWS — desde /api/news (server-side, sin CORS)
 // ============================================================
 async function fetchAllNews() {
   showLoading(true);
 
-  const allItems = [];
-  const seen     = new Set();
+  try {
+    const res  = await fetch(NEWS_API);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
 
-  // Intentar cada feed con diferentes proxies
-  const fetchPromises = RSS_FEEDS.map(feedUrl => fetchWithFallback(feedUrl));
-  const results       = await Promise.allSettled(fetchPromises);
-
-  results.forEach(r => {
-    if (r.status === 'fulfilled' && Array.isArray(r.value)) {
-      r.value.forEach(item => {
-        const key = item.title.toLowerCase().slice(0, 50);
-        if (!seen.has(key) && item.title.length > 5) {
-          seen.add(key);
-          allItems.push(item);
-        }
-      });
+    if (!data.ok || !data.items || data.items.length === 0) {
+      throw new Error('Sin artículos');
     }
-  });
 
-  // Ordenar por fecha descendente
-  allItems.sort((a, b) => new Date(b.rawDate) - new Date(a.rawDate));
+    // Añadir campos de display que el servidor no calcula
+    state.allNews = data.items.map(n => ({
+      ...n,
+      date:  formatDate(n.rawDate),
+      emoji: categoryEmoji(n.category)
+    }));
 
-  state.allNews = allItems;
-  state.loading = false;
-
-  if (allItems.length === 0) {
-    showFallbackMessage();
-  } else {
+    state.loading = false;
     renderFeatured();
     renderNews();
-    updateTickerWithNews(allItems);
+    updateTickerWithNews(state.allNews);
     animateBars();
     initIntersectionObserver();
+  } catch (e) {
+    console.error('Error cargando noticias:', e);
+    state.loading = false;
+    showFallbackMessage();
   }
 
   showLoading(false);
 }
 
-// ============================================================
-// FETCH CON FALLBACK DE PROXIES
-// ============================================================
-async function fetchWithFallback(rssUrl) {
-  for (const makeProxy of CORS_PROXIES) {
-    try {
-      const proxyUrl = makeProxy(rssUrl);
-      const res      = await fetch(proxyUrl, { signal: AbortSignal.timeout(8000) });
-      if (!res.ok) continue;
-
-      const text = await res.text();
-
-      // allorigins /get devuelve JSON con campo "contents"
-      let xmlText = text;
-      if (text.trim().startsWith('{')) {
-        try {
-          const json = JSON.parse(text);
-          xmlText = json.contents || text;
-        } catch (_) { /* ya es XML */ }
-      }
-
-      const items = parseRSSXML(xmlText);
-      if (items.length > 0) return items;
-    } catch (e) {
-      // Continuar con el siguiente proxy
-      continue;
-    }
-  }
-  return [];
-}
-
-// ============================================================
-// PARSEAR XML del RSS con DOMParser
-// ============================================================
-function parseRSSXML(xmlText) {
-  try {
-    const parser = new DOMParser();
-    const doc    = parser.parseFromString(xmlText, 'text/xml');
-    const items  = Array.from(doc.querySelectorAll('item'));
-
-    return items.map(item => {
-      const rawTitle = getText(item, 'title');
-      const link     = getText(item, 'link') || getAttr(item, 'guid', 'isPermaLink') || '';
-      const pubDate  = getText(item, 'pubDate') || '';
-      const rawDesc  = getText(item, 'description') || '';
-      const source   = getText(item, 'source') || extractSourceFromTitle(rawTitle);
-
-      // Limpiar título: quitar " - Nombre Medio" al final
-      const title    = cleanTitle(decodeHTML(rawTitle));
-      const excerpt  = decodeHTML(stripHTML(rawDesc)).slice(0, 200).trim();
-      const category = autoCategory(title + ' ' + excerpt);
-
-      return {
-        id:       Math.random().toString(36).slice(2),
-        title:    title || 'Sin título',
-        excerpt:  excerpt || 'Haz clic para leer el artículo completo en la fuente original.',
-        category,
-        source:   source || 'Fuente externa',
-        date:     formatDate(pubDate),
-        rawDate:  pubDate ? new Date(pubDate).toISOString() : new Date().toISOString(),
-        emoji:    categoryEmoji(category),
-        sentiment: autoSentiment(title + ' ' + excerpt),
-        url:      link,
-        popular:  Math.floor(Math.random() * 900) + 50
-      };
-    }).filter(n => n.title && n.title !== 'Sin título' && n.url);
-  } catch (e) {
-    return [];
-  }
-}
-
-function getText(el, tag) {
-  const node = el.querySelector(tag);
-  return node ? (node.textContent || '').trim() : '';
-}
-
-function getAttr(el, tag, attr) {
-  const node = el.querySelector(tag);
-  return node ? (node.getAttribute(attr) || '').trim() : '';
-}
-
-function cleanTitle(title) {
-  // Google News format: "Título del artículo - Nombre del Medio"
-  return title.replace(/\s*-\s*[^-]+$/, '').trim() || title;
-}
-
-function extractSourceFromTitle(title) {
-  const parts = (title || '').split(' - ');
-  return parts.length > 1 ? parts[parts.length - 1].trim() : 'Google News';
-}
 
 // ============================================================
 // AUTO-CATEGORÍA por palabras clave
