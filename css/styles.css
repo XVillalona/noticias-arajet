@@ -802,4 +802,18 @@ select option {
 .comment-translate-btn:hover {
   background: var(--color-warning); color: white; border-color: transparent;
 }
+.c-item-actions {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+}
+.comment-link-btn {
+  font-size: 9px; font-weight: 800; background: rgba(80, 23, 140, 0.1);
+  color: var(--color-brand-purple-lt); padding: 2px 8px; border-radius: 4px;
+  border: 1px solid rgba(138, 43, 226, 0.2); transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+.comment-link-btn:hover {
+  background: var(--color-brand-purple); color: white; border-color: transparent;
+  transform: translateY(-1px);
+}
+
 

@@ -884,6 +884,17 @@ function renderComments() {
       </button>
     ` : '';
 
+    const platformClean = c.platform.replace(' / X', '').replace(' Reviews', '');
+    const linkBtnHTML = `
+      <a href="${c.url}" 
+         target="_blank" 
+         rel="noopener" 
+         class="comment-link-btn" 
+         onclick="event.stopPropagation();">
+        Ver en ${platformClean} ↗
+      </a>
+    `;
+
     return `
       <article class="comment-item-card ${borderClass}" onclick="window.open('${c.url}', '_blank')">
         <div class="c-item-hdr">
@@ -903,7 +914,10 @@ function renderComments() {
         <p class="c-item-text">"${escapeHTML(c.text)}"</p>
         <div class="c-item-footer">
           <span class="c-item-likes">❤ ${c.likes.toLocaleString()}</span>
-          ${translationBtnHTML}
+          <div class="c-item-actions">
+            ${translationBtnHTML}
+            ${linkBtnHTML}
+          </div>
           <span class="c-item-date">${c.date}</span>
         </div>
       </article>

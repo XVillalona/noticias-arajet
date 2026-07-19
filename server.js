@@ -30,24 +30,112 @@ const MIME_TYPES = {
 };
 
 // ============================================================
-// CONFIG — RSS Feeds Multi-Idioma
+// CONFIG — RSS Feeds Multi-Idioma (Expandido con todas las fuentes)
 // ============================================================
 const RSS_FEEDS = [
-  // Español (RD, Colombia, Internacional)
-  { url: 'https://news.google.com/rss/search?q=arajet&hl=es-419&gl=DO&ceid=DO:es-419', lang: 'es' },
-  { url: 'https://news.google.com/rss/search?q=arajet+aerolinea&hl=es&gl=ES&ceid=ES:es', lang: 'es' },
+
+  // ─────────────────────────────────────────────────────────────
+  // BLOQUE 1: GOOGLE NEWS — Múltiples variantes de búsqueda (ES)
+  // ─────────────────────────────────────────────────────────────
+  // Nombre de marca
+  { url: 'https://news.google.com/rss/search?q=arajet&hl=es-419&gl=DO&ceid=DO:es-419', lang: 'es', source_tag: 'google-rss' },
+  { url: 'https://news.google.com/rss/search?q=%22ara+jet%22&hl=es-419&gl=DO&ceid=DO:es-419', lang: 'es', source_tag: 'google-rss' },
+  // Código IATA + vuelos específicos
+  { url: 'https://news.google.com/rss/search?q=arajet+DM&hl=es-419&gl=DO&ceid=DO:es-419', lang: 'es', source_tag: 'google-rss' },
+  // Hashtags y menciones
+  { url: 'https://news.google.com/rss/search?q=%23Arajet&hl=es-419&gl=DO&ceid=DO:es-419', lang: 'es', source_tag: 'google-rss' },
+  { url: 'https://news.google.com/rss/search?q=%40ArajetAirlines&hl=es-419&gl=DO&ceid=DO:es-419', lang: 'es', source_tag: 'google-rss' },
+  // Aerolínea + temas críticos
+  { url: 'https://news.google.com/rss/search?q=arajet+cancelado&hl=es-419&gl=DO&ceid=DO:es-419', lang: 'es', source_tag: 'google-rss' },
+  { url: 'https://news.google.com/rss/search?q=arajet+retraso&hl=es-419&gl=DO&ceid=DO:es-419', lang: 'es', source_tag: 'google-rss' },
+  { url: 'https://news.google.com/rss/search?q=arajet+queja&hl=es-419&gl=DO&ceid=DO:es-419', lang: 'es', source_tag: 'google-rss' },
+  { url: 'https://news.google.com/rss/search?q=arajet+nueva+ruta&hl=es-419&gl=DO&ceid=DO:es-419', lang: 'es', source_tag: 'google-rss' },
+  { url: 'https://news.google.com/rss/search?q=arajet+oferta&hl=es-419&gl=DO&ceid=DO:es-419', lang: 'es', source_tag: 'google-rss' },
+  { url: 'https://news.google.com/rss/search?q=arajet+incidente&hl=es-419&gl=DO&ceid=DO:es-419', lang: 'es', source_tag: 'google-rss' },
+
+  // ─────────────────────────────────────────────────────────────
+  // BLOQUE 2: MEDIOS DE REPÚBLICA DOMINICANA (RSS directos)
+  // ─────────────────────────────────────────────────────────────
+  // Diario Libre
+  { url: 'https://news.google.com/rss/search?q=arajet+site:diariolibre.com&hl=es-419&gl=DO&ceid=DO:es-419', lang: 'es', media: 'Diario Libre' },
+  // Listín Diario
+  { url: 'https://news.google.com/rss/search?q=arajet+site:listindiario.com&hl=es-419&gl=DO&ceid=DO:es-419', lang: 'es', media: 'Listín Diario' },
+  // El Nuevo Diario
+  { url: 'https://news.google.com/rss/search?q=arajet+site:elnuevodiario.com.do&hl=es-419&gl=DO&ceid=DO:es-419', lang: 'es', media: 'El Nuevo Diario' },
+  // Noticias SIN
+  { url: 'https://news.google.com/rss/search?q=arajet+site:noticiassin.com&hl=es-419&gl=DO&ceid=DO:es-419', lang: 'es', media: 'Noticias SIN' },
+  // CDN
+  { url: 'https://news.google.com/rss/search?q=arajet+site:cdn.com.do&hl=es-419&gl=DO&ceid=DO:es-419', lang: 'es', media: 'CDN' },
+  // Acento
+  { url: 'https://news.google.com/rss/search?q=arajet+site:acento.com.do&hl=es-419&gl=DO&ceid=DO:es-419', lang: 'es', media: 'Acento' },
+  // Hoy Digital
+  { url: 'https://news.google.com/rss/search?q=arajet+site:hoy.com.do&hl=es-419&gl=DO&ceid=DO:es-419', lang: 'es', media: 'Hoy Digital' },
+
+  // ─────────────────────────────────────────────────────────────
+  // BLOQUE 3: MEDIOS DE AVIACIÓN INTERNACIONALES
+  // ─────────────────────────────────────────────────────────────
+  // Simple Flying (EN)
+  { url: 'https://news.google.com/rss/search?q=arajet+site:simpleflying.com&hl=en-US&gl=US&ceid=US:en', lang: 'en', media: 'Simple Flying' },
+  // FlightGlobal (EN)
+  { url: 'https://news.google.com/rss/search?q=arajet+site:flightglobal.com&hl=en-US&gl=US&ceid=US:en', lang: 'en', media: 'FlightGlobal' },
+  // AeroTime (EN)
+  { url: 'https://news.google.com/rss/search?q=arajet+site:aerotime.aero&hl=en-US&gl=US&ceid=US:en', lang: 'en', media: 'AeroTime' },
+  // Aviation Week (EN)
+  { url: 'https://news.google.com/rss/search?q=arajet+site:aviationweek.com&hl=en-US&gl=US&ceid=US:en', lang: 'en', media: 'Aviation Week' },
+  // AirlineGeeks (EN)
+  { url: 'https://news.google.com/rss/search?q=arajet+site:airlinegeeks.com&hl=en-US&gl=US&ceid=US:en', lang: 'en', media: 'AirlineGeeks' },
+  // Aviacionline (ES)
+  { url: 'https://news.google.com/rss/search?q=arajet+site:aviacionline.com&hl=es&gl=AR&ceid=AR:es', lang: 'es', media: 'Aviacionline' },
+  // Arecoa (ES - RD)
+  { url: 'https://news.google.com/rss/search?q=arajet+site:arecoa.com&hl=es-419&gl=DO&ceid=DO:es-419', lang: 'es', media: 'Arecoa' },
+
+  // ─────────────────────────────────────────────────────────────
+  // BLOQUE 4: GOOGLE NEWS INGLÉS — variantes de búsqueda
+  // ─────────────────────────────────────────────────────────────
+  { url: 'https://news.google.com/rss/search?q=arajet+airline&hl=en-US&gl=US&ceid=US:en', lang: 'en', source_tag: 'google-rss' },
+  { url: 'https://news.google.com/rss/search?q=%22ara+jet%22+airline&hl=en-US&gl=US&ceid=US:en', lang: 'en', source_tag: 'google-rss' },
+  { url: 'https://news.google.com/rss/search?q=arajet+delay&hl=en-US&gl=US&ceid=US:en', lang: 'en', source_tag: 'google-rss' },
+  { url: 'https://news.google.com/rss/search?q=arajet+cancelled&hl=en-US&gl=US&ceid=US:en', lang: 'en', source_tag: 'google-rss' },
+  { url: 'https://news.google.com/rss/search?q=arajet+new+route&hl=en-US&gl=US&ceid=US:en', lang: 'en', source_tag: 'google-rss' },
+  { url: 'https://news.google.com/rss/search?q=%23Arajet&hl=en-US&gl=US&ceid=US:en', lang: 'en', source_tag: 'google-rss' },
+
+  // ─────────────────────────────────────────────────────────────
+  // BLOQUE 5: BING NEWS RSS (alternativa a Google News)
+  // ─────────────────────────────────────────────────────────────
+  { url: 'https://www.bing.com/news/search?q=arajet&format=rss', lang: 'es', source_tag: 'bing-rss' },
+  { url: 'https://www.bing.com/news/search?q=arajet+airline&format=rss', lang: 'en', source_tag: 'bing-rss' },
+  { url: 'https://www.bing.com/news/search?q=%22ara+jet%22&format=rss', lang: 'es', source_tag: 'bing-rss' },
+
+  // ─────────────────────────────────────────────────────────────
+  // BLOQUE 6: REDDIT RSS (r/aviation, r/travel, r/Dominican)
+  // ─────────────────────────────────────────────────────────────
+  { url: 'https://www.reddit.com/r/aviation/search.rss?q=arajet&sort=new', lang: 'en', media: 'Reddit r/aviation' },
+  { url: 'https://www.reddit.com/r/travel/search.rss?q=arajet&sort=new', lang: 'en', media: 'Reddit r/travel' },
+  { url: 'https://www.reddit.com/r/Dominican/search.rss?q=arajet&sort=new', lang: 'es', media: 'Reddit r/Dominican' },
+  { url: 'https://www.reddit.com/r/Flights/search.rss?q=arajet&sort=new', lang: 'en', media: 'Reddit r/Flights' },
+
+  // ─────────────────────────────────────────────────────────────
+  // BLOQUE 7: REDES SOCIALES VÍA GOOGLE NEWS
+  // ─────────────────────────────────────────────────────────────
+  // X / Twitter menciones via Google
+  { url: 'https://news.google.com/rss/search?q=arajet+site:twitter.com&hl=es-419&gl=DO&ceid=DO:es-419', lang: 'es', media: 'X / Twitter' },
+  // LinkedIn menciones via Google
+  { url: 'https://news.google.com/rss/search?q=arajet+site:linkedin.com&hl=es-419&gl=DO&ceid=DO:es-419', lang: 'es', media: 'LinkedIn' },
+  // YouTube menciones via Google
+  { url: 'https://news.google.com/rss/search?q=arajet+site:youtube.com&hl=es-419&gl=DO&ceid=DO:es-419', lang: 'es', media: 'YouTube' },
+
+  // ─────────────────────────────────────────────────────────────
+  // BLOQUE 8: FRANCÉS Y PORTUGUÉS
+  // ─────────────────────────────────────────────────────────────
+  { url: 'https://news.google.com/rss/search?q=arajet&hl=fr&gl=FR&ceid=FR:fr', lang: 'fr', source_tag: 'google-rss' },
+  { url: 'https://news.google.com/rss/search?q=arajet&hl=pt-BR&gl=BR&ceid=BR:pt', lang: 'pt', source_tag: 'google-rss' },
+
+  // ─────────────────────────────────────────────────────────────
+  // BLOQUE 9: COMPETIDORES (benchmark)
+  // ─────────────────────────────────────────────────────────────
   { url: 'https://news.google.com/rss/search?q=wingo+aero&hl=es&gl=CO&ceid=CO:es', lang: 'es', competitor: 'Wingo' },
   { url: 'https://news.google.com/rss/search?q=sky+high+aviation&hl=es&gl=DO&ceid=DO:es', lang: 'es', competitor: 'Sky High' },
-  
-  // Inglés (Aviación especializada y spotters)
-  { url: 'https://news.google.com/rss/search?q=arajet+airline&hl=en-US&gl=US&ceid=US:en', lang: 'en' },
-  { url: 'https://news.google.com/rss/search?q=%22simple+flying%22+arajet&hl=en-US&gl=US&ceid=US:en', lang: 'en' },
-  
-  // Francés (Destinos del Caribe Francés: Martinica, Guadalupe)
-  { url: 'https://news.google.com/rss/search?q=arajet&hl=fr&gl=FR&ceid=FR:fr', lang: 'fr' },
-  
-  // Portugués (Rutas de Brasil: Sao Paulo)
-  { url: 'https://news.google.com/rss/search?q=arajet&hl=pt-BR&gl=BR&ceid=BR:pt', lang: 'pt' }
+  { url: 'https://news.google.com/rss/search?q=caribbean+airlines&hl=en-US&gl=US&ceid=US:en', lang: 'en', competitor: 'Caribbean Airlines' }
 ];
 
 // Cache
@@ -199,15 +287,122 @@ function translateToSpanish(text, lang) {
 }
 
 // ============================================================
-// Sentiment Analysis (extended vocabulary)
+// Detección Inteligente de Sentimiento (Ampliada)
 // ============================================================
 function autoSentiment(t) {
   t = t.toLowerCase();
-  const neg = /retraso|cancelado|queja|problema|reclamo|accidente|cr[ií]tica|mal|p[eé]simo|terrible|falla|emergencia|demora|perdida|perdió|retrasos|caos|huelga|lamentable|susto|fallo|daño|dañado/;
-  const pos = /excelente|nuevo|[eé]xito|crecimiento|expan|oferta|promo|r[eé]cord|premia|logro|inaugura|mejor|lider|barato|econ[oó]mico|c[oó]modo|puntual|puntualidad|felicitaciones|bueno|agradable/;
+
+  // Señales negativas — quejas, retrasos, cancelaciones, incidentes
+  const neg = new RegExp([
+    // Operativos críticos
+    'retraso', 'retras[ao]', 'demora', 'cancelad[ao]', 'cancelaci[oó]n',
+    'queja', 'reclamo', 'protesta', 'inconformidad',
+    'accidente', 'incidente', 'emergencia', 'falla', 'avería',
+    'aterrizaje de emergencia', 'evacuaci[oó]n',
+    // Servicio al cliente
+    'perdida', 'perdió', 'equipaje perdido', 'maleta', 'maletín',
+    'p[eé]simo', 'terrible', 'desastre', 'caos', 'colapso',
+    'lamentable', 'decepcionante', 'estafaron', 'cobro extra',
+    'sobrecargo inesperado', 'timo', 'fraude',
+    // Estado negativo
+    'mal', 'malos', 'mala', 'fatal', 'horrible', 'espantoso',
+    'huelga', 'paro', 'cierre', 'suspensi[oó]n',
+    'daño', 'dañado', 'roto', 'defect[ao]',
+    // En inglés
+    'delay', 'delayed', 'cancelled', 'cancellation', 'complaint',
+    'lost luggage', 'baggage claim', 'stranded', 'diverted',
+    'crash', 'incident', 'emergency', 'turbulence',
+    'terrible', 'awful', 'horrible', 'worst',
+    // En francés
+    'retard', 'annulé', 'plainte', 'perdu', 'bagages',
+    // En portugués
+    'atraso', 'cancelamento', 'reclamação', 'perdido'
+  ].join('|'));
+
+  // Señales positivas — crecimiento, nuevas rutas, promociones, elogios
+  const pos = new RegExp([
+    // Crecimiento y expansión
+    'excelente', 'fantástico', 'increíble', 'espectacular',
+    '[eé]xito', 'exitoso', 'crecimiento', 'r[eé]cord', 'logro', 'hito',
+    'expan', 'inaugura', 'lanzamiento', 'inaugur',
+    'nueva ruta', 'nuevo destino', 'nuevo vuelo', 'nueva conexi[oó]n',
+    'flota nueva', 'nueva aeronave', 'incorpora',
+    // Promociones y precios
+    'oferta', 'promo', 'promoción', 'descuento', 'barato',
+    'tarifa especial', 'precio accesible', 'vuelos desde',
+    // Servicio positivo
+    'puntual', 'puntualidad', 'a tiempo', 'eficiente',
+    'excelente servicio', 'buena atenci[oó]n', 'amable',
+    'felicitaciones', 'recomendado', 'bueno', 'agradable',
+    'mejor', 'mejorado', 'lider', 'liderazgo',
+    'premia', 'premios', 'reconocimiento', 'galardon',
+    // En inglés
+    'excellent', 'amazing', 'great', 'fantastic', 'wonderful',
+    'new route', 'expansion', 'launch', 'record', 'growth',
+    'on time', 'punctual', 'award', 'best', 'top',
+    'cheap', 'affordable', 'deal', 'promotion',
+    // En francés
+    'excellent', 'nouveau', 'promotion', 'expansion',
+    // En portugués
+    'excelente', 'novo', 'promoção', 'crescimento'
+  ].join('|'));
+
   if (neg.test(t)) return 'neg';
   if (pos.test(t)) return 'pos';
   return 'neu';
+}
+
+// ============================================================
+// Detección Inteligente de Categoría (Ampliada)
+// ============================================================
+function autoCategory(t) {
+  t = t.toLowerCase();
+
+  // Incidentes críticos (máxima prioridad)
+  if (new RegExp([
+    'retraso', 'retras[ao]', 'demora', 'cancelad[ao]', 'cancelaci[oó]n',
+    'incidente', 'accidente', 'emergencia', 'aterrizaje de emergencia',
+    'falla', 'avería', 'queja', 'reclamo', 'huelga', 'paro',
+    'equipaje perdido', 'maleta', 'daño',
+    'delay', 'cancelled', 'cancellation', 'incident', 'accident',
+    'emergency', 'complaint', 'lost luggage', 'stranded', 'diverted'
+  ].join('|')).test(t)) return 'incidentes';
+
+  // Nuevas rutas y destinos
+  if (new RegExp([
+    'nueva ruta', 'nuevo destino', 'nuevo vuelo', 'nueva conexi[oó]n',
+    'nueva frecuencia', 'nuevo itinerario', 'abre vuelos',
+    'vuela a', 'conecta', 'nueva operaci[oó]n',
+    'new route', 'new destination', 'new flight', 'launches',
+    'DM\\d{3}', 'vuelo DM'
+  ].join('|')).test(t)) return 'rutas';
+
+  // Precios y promociones
+  if (new RegExp([
+    'oferta', 'promo', 'descuento', 'tarifa', 'precio', 'boleto',
+    'tiquete', 'barato', 'econ[oó]mico', 'vuelos desde',
+    'tarifa especial', 'promoción', 'super oferta',
+    'deal', 'fare', 'ticket price', 'cheap flight', 'sale'
+  ].join('|')).test(t)) return 'precios';
+
+  // Expansión de flota y crecimiento
+  if (new RegExp([
+    'expan', 'crecimiento', 'flota', 'aeronave', 'avión nuevo',
+    'incorpora', 'boeing', 'airbus', 'max 8', 'hub', 'base',
+    'new aircraft', 'fleet', 'expansion', 'growth', 'headquarters'
+  ].join('|')).test(t)) return 'expansion';
+
+  // Social y viral
+  if (new RegExp([
+    'twitter', 'x\.com', 'instagram', 'facebook', 'tiktok', 'linkedin',
+    'youtube', 'viral', 'tendencia', 'hashtag', '#arajet', '@arajet',
+    'trending', 'redes sociales', 'reseña', 'review'
+  ].join('|')).test(t)) return 'social';
+
+  // Opinión y análisis
+  if (/opini[oó]n|an[aá]lisis|editorial|columna|perspectiva|commentary|analysis/.test(t)) return 'opinion';
+
+  return 'operaciones';
 }
 
 const CATEGORY_IMAGES = {
@@ -224,7 +419,9 @@ function transformItem(raw) {
   const titleFull = decodeEntities(raw.title || '');
   const dashIdx   = titleFull.lastIndexOf(' - ');
   const title     = dashIdx > 0 ? titleFull.slice(0, dashIdx).trim() : titleFull;
-  const source    = dashIdx > 0 ? titleFull.slice(dashIdx + 3).trim() : (raw.source || 'Google News');
+  // Prefer named media tag over parsed source
+  const source    = raw.media ||
+    (dashIdx > 0 ? titleFull.slice(dashIdx + 3).trim() : (raw.source || 'Google News'));
 
   const excerpt   = decodeEntities(stripTags(raw.description || '')).slice(0, 220).trim();
   const category  = autoCategory(title + ' ' + excerpt);
@@ -237,31 +434,21 @@ function transformItem(raw) {
   const isTranslated = raw.lang !== 'es';
 
   return {
-    id:       Math.random().toString(36).slice(2),
-    title:    title || 'Sin título',
-    excerpt:  excerpt || 'Haz clic para leer el artículo completo.',
+    id:         Math.random().toString(36).slice(2),
+    title:      title || 'Sin título',
+    excerpt:    excerpt || 'Haz clic para leer el artículo completo.',
     category,
     source,
-    rawDate:  raw.pubDate ? new Date(raw.pubDate).toISOString() : new Date().toISOString(),
-    url:      raw.link,
+    media_tag:  raw.media || null,
+    rawDate:    raw.pubDate ? new Date(raw.pubDate).toISOString() : new Date().toISOString(),
+    url:        raw.link,
     sentiment,
     image,
-    lang:     raw.lang,
+    lang:       raw.lang,
     competitor: raw.competitor,
     translation: isTranslated ? { title: transTitle, excerpt: transExcerpt } : null,
-    popular:  Math.floor(Math.random() * 900) + 50
+    popular:    Math.floor(Math.random() * 900) + 50
   };
-}
-
-function autoCategory(t) {
-  t = t.toLowerCase();
-  if (/ruta|destino|vuelo nuevo|conexi[oó]n|frecuencia|itinerario|vuela/.test(t)) return 'rutas';
-  if (/precio|tarifa|oferta|descuento|promo|boleto|tiquete|barato|econ[oó]mico|viaje/.test(t)) return 'precios';
-  if (/retraso|cancelado|incidente|problema|queja|reclamo|accidente|emergencia|falla|demora|maletas|p[eé]rdida/.test(t)) return 'incidentes';
-  if (/expan|crecimiento|nuevo|base|hub|incorpora|flota|aeronave|boeing|airbus/.test(t)) return 'expansion';
-  if (/twitter|instagram|facebook|tiktok|viral|tendencia|hashtag|red social/.test(t)) return 'social';
-  if (/opini[oó]n|an[aá]lisis|editorial|columna/.test(t)) return 'opinion';
-  return 'operaciones';
 }
 
 function stripTags(html)    { return html.replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim(); }
@@ -281,16 +468,19 @@ async function getAllNews() {
   for (const feed of RSS_FEEDS) {
     try {
       const xml = await fetchUrl(feed.url);
-      const raw = parseRSS(xml, feed);
-      for (const r of raw) {
-        const key = r.title.toLowerCase().slice(0, 50);
+      // Pass full feed config so transformItem can use media/source_tag
+      const rawItems = parseRSS(xml, feed);
+      for (const r of rawItems) {
+        // Add media label from feed config
+        if (feed.media) r.media = feed.media;
+        const key = r.title.toLowerCase().slice(0, 60);
         if (!seen.has(key) && r.title.length > 5) {
           seen.add(key);
           items.push(transformItem(r));
         }
       }
     } catch (e) {
-      console.error(`Feed error: ${feed.url}`, e.message);
+      console.error(`Feed error [${feed.media || feed.source_tag || 'feed'}]: ${feed.url.slice(0, 80)}`, e.message);
     }
   }
 
