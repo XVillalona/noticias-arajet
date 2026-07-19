@@ -42,62 +42,101 @@ const state = {
 };
 
 // ============================================================
-// HARDCODED COMMMENT DATA (Linked with social media network filter)
+// HARDCODED COMMENT DATA (Multi-language executive reviews)
 // ============================================================
 const COMMENTS_DATA = [
   {
     id: 1, user: 'María R. (@mariar_spot)', avatar: '😊', platform: 'Twitter / X',
     text: 'Vuelo SDQ-BOG con @ArajetAirlines excelente. Puntual, tripulación amable y precio increíble. Definitivamente vuelvo! ✈🇩🇴',
-    date: 'Hace 1 día', likes: 624, sentiment: 'pos',
+    date: 'Hace 1 día', likes: 624, sentiment: 'pos', lang: 'es',
     url: 'https://twitter.com/search?q=arajet&f=live'
   },
   {
     id: 2, user: 'Carlos M. (@carlosm_aviation)', avatar: '😤', platform: 'Facebook',
     text: 'Terrible experiencia con Arajet. Mi vuelo fue retrasado 4 horas sin ninguna explicación. Perdí mi conexión en Santo Domingo. Pésimo servicio.',
-    date: 'Hace 2 días', likes: 89, sentiment: 'neg',
+    date: 'Hace 2 días', likes: 89, sentiment: 'neg', lang: 'es',
     url: 'https://www.facebook.com/ArajetAirlines'
   },
   {
     id: 3, user: 'Ana L.', avatar: '🌟', platform: 'Google Reviews',
     text: 'Arajet me permitió visitar a mi familia en Miami por primera vez en años. Los precios son accesibles para la clase media dominicana. Totalmente recomendado.',
-    date: 'Hace 3 días', likes: 512, sentiment: 'pos',
+    date: 'Hace 3 días', likes: 512, sentiment: 'pos', lang: 'es',
     url: 'https://www.google.com/search?q=arajet+reviews'
   },
   {
-    id: 4, user: 'Pedro G. (@pedro_travels)', avatar: '🤔', platform: 'Twitter / X',
+    id: 4, user: 'Aviation Enthusiast (@avgeeken_us)', avatar: '✈️', platform: 'Twitter / X',
+    text: 'Flew the new Arajet route from SDQ to Toronto. Brand new Boeing 737 MAX 8, super clean cabin and friendly Dominican crew. Amazing low fares! ✈️🇨🇦',
+    date: 'Hace 1 día', likes: 450, sentiment: 'pos', lang: 'en',
+    url: 'https://twitter.com/search?q=arajet',
+    translation: {
+      text: 'Volé en la nueva ruta de Arajet de SDQ a Toronto. Boeing 737 MAX 8 nuevo, cabina súper limpia y tripulación dominicana amable. ¡Tarifas bajas increíbles! ✈️🇨🇦'
+    }
+  },
+  {
+    id: 5, user: 'Frustrated Traveler', avatar: '👜', platform: 'Google Reviews',
+    text: 'Arajet lost my bag on my flight from Santo Domingo to Bogotá. It took 3 days to get it back, and customer service at the airport was not helpful.',
+    date: 'Hace 3 días', likes: 232, sentiment: 'neg', lang: 'en',
+    url: 'https://www.google.com/search?q=arajet+reviews',
+    translation: {
+      text: 'Arajet perdió mi equipaje en mi vuelo de Santo Domingo a Bogotá. Tardaron 3 días en devolverlo, y el servicio al cliente en el aeropuerto no fue de ayuda.'
+    }
+  },
+  {
+    id: 6, user: 'Thiago Silva (@thiago_flights)', avatar: '🇧🇷', platform: 'Instagram',
+    text: 'Excelente voo com a Arajet de São Paulo (GRU) para Santo Domingo (SDQ). Avião novo, tripulação prestativa e pontual. Muito bom ver novas opções de baixo custo no Brasil! 🇧🇷🇩🇴',
+    date: 'Hace 4 días', likes: 820, sentiment: 'pos', lang: 'pt',
+    url: 'https://www.instagram.com/arajetairlines/',
+    translation: {
+      text: 'Excelente vuelo con Arajet de São Paulo (GRU) a Santo Domingo (SDQ). Avión nuevo, tripulación servicial y puntual. ¡Muy bueno ver nuevas opciones de bajo costo en Brasil! 🇧🇷🇩🇴'
+    }
+  },
+  {
+    id: 7, user: 'Mariana Souza', avatar: '😕', platform: 'Twitter / X',
+    text: 'Comprei passagens com a Arajet, mas tive problemas com a taxa de bagagem que não ficou clara no site. Decepcionada com essa cobrança surpresa no aeroporto.',
+    date: 'Hace 1 semana', likes: 48, sentiment: 'neg', lang: 'pt',
+    url: 'https://twitter.com/search?q=arajet',
+    translation: {
+      text: 'Compré pasajes con Arajet, pero tuve problemas con la tarifa de equipaje que no estaba clara en el sitio web. Decepcionada con este cobro sorpresa en el aeropuerto.'
+    }
+  },
+  {
+    id: 8, user: 'Luc Dubois (@luc_guadeloupe)', avatar: '🇫🇷', platform: 'Facebook',
+    text: 'Arajet connecte enfin la Guadeloupe à Saint-Domingue à un tarif très compétitif! Le vol s\'est bien passé, appareil moderne. Très bonne nouvelle pour les Antilles. 🌴✈️',
+    date: 'Hace 5 días', likes: 110, sentiment: 'pos', lang: 'fr',
+    url: 'https://www.facebook.com/ArajetAirlines',
+    translation: {
+      text: '¡Arajet finalmente conecta Guadalupe con Santo Domingo a una tarifa muy competitiva! El vuelo salió bien, avión moderno. Excelente noticia para las Antillas. 🌴✈️'
+    }
+  },
+  {
+    id: 9, user: 'Pierre M. (@pierre_travels)', avatar: '⚠️', platform: 'TikTok',
+    text: 'Retard de 3 heures sur mon vol Arajet entre Montréal et Saint-Domingue. Aucune information fournie en français ou en anglais par le personnel. Expérience frustrante.',
+    date: 'Hace 2 semanas', likes: 950, sentiment: 'neg', lang: 'fr', // High impact comment!
+    url: 'https://www.tiktok.com/@arajet',
+    translation: {
+      text: 'Retraso de 3 horas en mi vuelo de Arajet entre Montreal y Santo Domingo. El personal no proporcionó ninguna información en francés o inglés. Experiencia frustrante.'
+    }
+  },
+  {
+    id: 10, user: 'Pedro G. (@pedro_travels)', avatar: '🤔', platform: 'Twitter / X',
     text: 'Compré pasaje con Arajet y el precio fue cambiando entre que lo metí al carrito y llegué al checkout. Alguien más le pasa esto? #Arajet',
-    date: 'Hace 4 días', likes: 1278, sentiment: 'neg', // High impact comment!
+    date: 'Hace 4 días', likes: 1278, sentiment: 'neg', lang: 'es', // High impact comment!
     url: 'https://twitter.com/search?q=%23Arajet&f=live'
   },
   {
-    id: 5, user: 'Sofía V.', avatar: '💝', platform: 'Instagram',
+    id: 11, user: 'Sofía V.', avatar: '💝', platform: 'Instagram',
     text: 'Mi luna de miel a Cartagena con Arajet salió perfecta y económica. La aerolínea dominicana está creciendo muchísimo. Orgullo nacional 🇩🇴❤',
-    date: 'Hace 5 días', likes: 743, sentiment: 'pos',
+    date: 'Hace 5 días', likes: 743, sentiment: 'pos', lang: 'es',
     url: 'https://www.instagram.com/arajetairlines/'
   },
   {
-    id: 6, user: 'Aviation RD Analyst', avatar: '📰', platform: 'LinkedIn',
-    text: 'Arajet representa el fenómeno más importante de la aviación caribeña en la última década. Su modelo ULCC está democratizando el acceso al transporte aéreo.',
-    date: 'Hace 6 días', likes: 334, sentiment: 'pos',
-    url: 'https://www.linkedin.com/search/results/all/?keywords=arajet'
-  },
-  {
-    id: 7, user: 'Manuel P.', avatar: '😐', platform: 'Google Reviews',
-    text: 'Vuelo normal, sin sorpresas. Asiento cómodo para el precio pagado. Servicio a bordo básico como se espera de una ULCC. Lo que esperas es lo que obtienes.',
-    date: 'Hace 1 semana', likes: 67, sentiment: 'neu',
-    url: 'https://www.tripadvisor.com/Airline_Review-d8729164-Reviews-Arajet.html'
-  },
-  {
-    id: 8, user: 'Tourist 🌴 (@travel_caribbean)', avatar: '🌴', platform: 'TikTok',
+    id: 12, user: 'Tourist 🌴 (@travel_caribbean)', avatar: '🌴', platform: 'TikTok',
     text: 'ARAJET IS AMAZING! Flew from NYC connecting through SDQ to Punta Cana. The price was unbelievable. Dominican low cost carrier is changing the game!',
-    date: 'Hace 1 semana', likes: 18920, sentiment: 'pos', // Extremely high impact!
-    url: 'https://www.tiktok.com/search?q=arajet'
-  },
-  {
-    id: 9, user: 'Av. Analyst (@analyst_aviation)', avatar: '✍', platform: 'Twitter / X',
-    text: 'Arajet está ejecutando un playbook perfecto de expansión regional ULCC. En menos de 2 años conecta más de 20 destinos. Comparable a Spirit en sus primeros años.',
-    date: 'Hace 2 semanas', likes: 445, sentiment: 'pos',
-    url: 'https://twitter.com/search?q=arajet'
+    date: 'Hace 1 semana', likes: 18920, sentiment: 'pos', lang: 'en', // Extremely high impact!
+    url: 'https://www.tiktok.com/search?q=arajet',
+    translation: {
+      text: '¡ARAJET ES INCREÍBLE! Volé de Nueva York conectando por SDQ a Punta Cana. El precio fue increíble. ¡La aerolínea dominicana de bajo costo está cambiando el juego!'
+    }
   }
 ];
 
@@ -643,11 +682,16 @@ function createNewsCardHTML(news) {
   const sLabel = { pos: 'Positivo 👍', neg: 'Negativo 👎', neu: 'Neutral 😐' }[news.sentiment] || 'Neutral';
   const sClass = { pos: 'sent-badge pos', neg: 'sent-badge neg', neu: 'sent-badge neu' }[news.sentiment] || 'sent-badge neu';
   const flag   = { es: '🇩🇴', en: '🇺🇸', fr: '🇫🇷', pt: '🇧🇷' }[news.lang] || '🇩🇴';
+  const fallbackUrl = getFallbackCategoryImg(news.category);
   
   return `
     <article class="news-card" data-id="${news.id}">
       <div class="card-img-wrap">
-        <img class="card-img" src="${escapeAttr(news.image)}" alt="${escapeAttr(news.title)}" loading="lazy" />
+        <img class="card-img" 
+             src="${escapeAttr(news.image)}" 
+             alt="${escapeAttr(news.title)}" 
+             onerror="this.onerror=null; this.src='${escapeAttr(fallbackUrl)}';"
+             loading="lazy" />
         <div class="card-lang-indicator" title="Idioma original">${flag}</div>
         <div class="card-read-overlay"><span>Leer Detalles 🔍</span></div>
       </div>
@@ -665,6 +709,19 @@ function createNewsCardHTML(news) {
       </div>
     </article>
   `.trim();
+}
+
+function getFallbackCategoryImg(cat) {
+  const fallbacks = {
+    rutas:       'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80',
+    precios:     'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80',
+    incidentes:  'https://images.unsplash.com/photo-1520437358207-3df7e22434cd?auto=format&fit=crop&w=800&q=80',
+    expansion:   'https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=80',
+    social:      'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80',
+    opinion:     'https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=800&q=80',
+    operaciones: 'https://images.unsplash.com/photo-1495313587906-2cb34be0027f?auto=format&fit=crop&w=800&q=80'
+  };
+  return fallbacks[cat] || fallbacks['operaciones'];
 }
 
 // Bind card click triggers to display detailed modal (Fase 2)
@@ -812,17 +869,30 @@ function renderComments() {
   container.innerHTML = filtered.map(c => {
     const icon = { pos: '💚', neg: '💔', neu: '💬' }[c.sentiment];
     const borderClass = { pos: 'c-card-pos', neg: 'c-card-neg', neu: 'c-card-neu' }[c.sentiment];
+    const flag = { es: '🇩🇴', en: '🇺🇸', fr: '🇫🇷', pt: '🇧🇷' }[c.lang] || '🇩🇴';
     
     // Highlight comment automatically based on engagement/likes threshold
     const isHighImpact = c.likes > 800;
     const badgeHTML = isHighImpact ? `<span class="high-engagement-badge">🔥 Alto Impacto</span>` : '';
+
+    // Translation toggle button HTML
+    const translationBtnHTML = c.translation ? `
+      <button class="comment-translate-btn" 
+              data-translated="false" 
+              onclick="event.stopPropagation(); toggleCommentTranslation(this, ${c.id})">
+        Ver Traducido
+      </button>
+    ` : '';
 
     return `
       <article class="comment-item-card ${borderClass}" onclick="window.open('${c.url}', '_blank')">
         <div class="c-item-hdr">
           <div class="c-item-avatar">${c.avatar}</div>
           <div class="c-item-meta">
-            <span class="c-item-user">${escapeHTML(c.user)}</span>
+            <div class="c-item-user-row">
+              <span class="c-item-user">${escapeHTML(c.user)}</span>
+              <span class="c-item-lang-flag" title="Idioma original">${flag}</span>
+            </div>
             <span class="c-item-network">${c.platform}</span>
           </div>
           <div class="c-item-indicators">
@@ -833,12 +903,33 @@ function renderComments() {
         <p class="c-item-text">"${escapeHTML(c.text)}"</p>
         <div class="c-item-footer">
           <span class="c-item-likes">❤ ${c.likes.toLocaleString()}</span>
+          ${translationBtnHTML}
           <span class="c-item-date">${c.date}</span>
         </div>
       </article>
     `;
   }).join('');
 }
+
+// Global scope toggle for comment translations
+window.toggleCommentTranslation = function(btn, id) {
+  const comment = COMMENTS_DATA.find(c => c.id === id);
+  if (!comment || !comment.translation) return;
+
+  const card = btn.closest('.comment-item-card');
+  const textEl = card.querySelector('.c-item-text');
+  
+  const isTranslated = btn.dataset.translated === 'true';
+  if (isTranslated) {
+    textEl.textContent = `"${comment.text}"`;
+    btn.textContent = 'Ver Traducido';
+    btn.dataset.translated = 'false';
+  } else {
+    textEl.textContent = `"${comment.translation.text}"`;
+    btn.textContent = 'Ver Original';
+    btn.dataset.translated = 'true';
+  }
+};
 
 // ============================================================
 // BRAND METRICS: SOURCES SHARE AND TOP ACCOUNTS
