@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "description": "Portal de noticias y monitoreo de menciones sobre Arajet",
   "scripts": {
-    "start": "serve -s . -l $PORT",
+    "start": "serve -s . --listen tcp://0.0.0.0:$PORT",
     "dev": "serve -s . -l 3000"
   },
   "dependencies": {
     "serve": "^14.2.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
