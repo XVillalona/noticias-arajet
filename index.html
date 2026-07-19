@@ -36,7 +36,7 @@
         <a href="#tendencias" class="nav-item" id="nav-tendencias">Tendencias</a>
         <a href="#noticias" class="nav-item" id="nav-noticias">Noticias</a>
         <a href="#comentarios" class="nav-item" id="nav-comentarios">Comentarios</a>
-        <a href="#fuentes" class="nav-item" id="nav-fuentes">Fuentes</a>
+        <a href="#social-monitor" class="nav-item" id="nav-social">📲 Social</a>
         <a href="#alertas" class="nav-item" id="nav-alertas">Alertas</a>
       </nav>
 
@@ -410,6 +410,134 @@
         </div>
       </section>
 
+
+      <!-- ============================================================
+           SECTION SOCIAL: MONITOR EN VIVO (REDES SOCIALES)
+           ============================================================ -->
+      <section class="dashboard-section reveal" id="social-monitor">
+        <div class="section-header-row">
+          <h2 class="section-title">📲 Monitor Social en Vivo</h2>
+          <span class="section-meta-badge">Acceso directo a menciones en tiempo real</span>
+        </div>
+        <div class="social-monitor-notice">
+          <span class="notice-icon">ℹ️</span>
+          <p>Las redes sociales (X/Twitter, Instagram, Facebook) <strong>no ofrecen acceso RSS gratuito</strong> desde 2023. Los botones de abajo abren búsquedas en tiempo real directamente en cada plataforma con un solo clic.</p>
+        </div>
+
+        <div class="social-monitor-grid">
+
+          <!-- X / Twitter -->
+          <div class="social-monitor-card platform-twitter">
+            <div class="sm-card-header">
+              <span class="sm-platform-icon">𝕏</span>
+              <div>
+                <h3 class="sm-platform-name">X / Twitter</h3>
+                <p class="sm-platform-desc">Quejas, opiniones y menciones en tiempo real</p>
+              </div>
+              <span class="sm-priority-badge">🔴 Prioridad Alta</span>
+            </div>
+            <div class="sm-search-links">
+              <a href="https://twitter.com/search?q=arajet&f=live&src=typed_query" target="_blank" rel="noopener" class="sm-link-btn primary">🔍 #arajet (En Vivo)</a>
+              <a href="https://twitter.com/search?q=%22ara+jet%22&f=live" target="_blank" rel="noopener" class="sm-link-btn">"Ara Jet"</a>
+              <a href="https://twitter.com/search?q=%40ArajetAirlines&f=live" target="_blank" rel="noopener" class="sm-link-btn">@ArajetAirlines</a>
+              <a href="https://twitter.com/search?q=arajet+cancelado&f=live" target="_blank" rel="noopener" class="sm-link-btn danger">⚠ Cancelados</a>
+              <a href="https://twitter.com/search?q=arajet+retraso&f=live" target="_blank" rel="noopener" class="sm-link-btn danger">⚠ Retrasos</a>
+              <a href="https://twitter.com/search?q=arajet+queja&f=live" target="_blank" rel="noopener" class="sm-link-btn danger">⚠ Quejas</a>
+              <a href="https://twitter.com/search?q=arajet+nueva+ruta&f=live" target="_blank" rel="noopener" class="sm-link-btn positive">✓ Nuevas Rutas</a>
+              <a href="https://twitter.com/search?q=%23Arajet&f=live" target="_blank" rel="noopener" class="sm-link-btn">#Arajet</a>
+            </div>
+          </div>
+
+          <!-- Reddit -->
+          <div class="social-monitor-card platform-reddit">
+            <div class="sm-card-header">
+              <span class="sm-platform-icon">🟠</span>
+              <div>
+                <h3 class="sm-platform-name">Reddit</h3>
+                <p class="sm-platform-desc">Hilos de discusión, reseñas y experiencias</p>
+              </div>
+              <span class="sm-priority-badge rss-badge">✅ RSS Activo</span>
+            </div>
+            <div class="sm-search-links">
+              <a href="https://www.reddit.com/search/?q=arajet&sort=new" target="_blank" rel="noopener" class="sm-link-btn primary">🔍 Búsqueda General</a>
+              <a href="https://www.reddit.com/r/aviation/search/?q=arajet&sort=new" target="_blank" rel="noopener" class="sm-link-btn">r/aviation</a>
+              <a href="https://www.reddit.com/r/travel/search/?q=arajet&sort=new" target="_blank" rel="noopener" class="sm-link-btn">r/travel</a>
+              <a href="https://www.reddit.com/r/Dominican/search/?q=arajet&sort=new" target="_blank" rel="noopener" class="sm-link-btn">r/Dominican</a>
+              <a href="https://www.reddit.com/r/Flights/search/?q=arajet&sort=new" target="_blank" rel="noopener" class="sm-link-btn">r/Flights</a>
+            </div>
+          </div>
+
+          <!-- Facebook -->
+          <div class="social-monitor-card platform-facebook">
+            <div class="sm-card-header">
+              <span class="sm-platform-icon">📘</span>
+              <div>
+                <h3 class="sm-platform-name">Facebook</h3>
+                <p class="sm-platform-desc">Comentarios en publicaciones públicas</p>
+              </div>
+              <span class="sm-priority-badge">🔴 Prioridad Alta</span>
+            </div>
+            <div class="sm-search-links">
+              <a href="https://www.facebook.com/search/posts?q=arajet" target="_blank" rel="noopener" class="sm-link-btn primary">🔍 Menciones (Público)</a>
+              <a href="https://www.facebook.com/ArajetAirlines" target="_blank" rel="noopener" class="sm-link-btn">Página Oficial</a>
+              <a href="https://www.facebook.com/search/posts?q=arajet+queja" target="_blank" rel="noopener" class="sm-link-btn danger">⚠ Quejas</a>
+              <a href="https://www.facebook.com/search/posts?q=arajet+cancelado" target="_blank" rel="noopener" class="sm-link-btn danger">⚠ Cancelados</a>
+            </div>
+          </div>
+
+          <!-- Instagram -->
+          <div class="social-monitor-card platform-instagram">
+            <div class="sm-card-header">
+              <span class="sm-platform-icon">📸</span>
+              <div>
+                <h3 class="sm-platform-name">Instagram</h3>
+                <p class="sm-platform-desc">Historias, reels y etiquetas de pasajeros</p>
+              </div>
+              <span class="sm-priority-badge">🟡 Prioridad Media</span>
+            </div>
+            <div class="sm-search-links">
+              <a href="https://www.instagram.com/explore/tags/arajet/" target="_blank" rel="noopener" class="sm-link-btn primary">#arajet</a>
+              <a href="https://www.instagram.com/arajetairlines/" target="_blank" rel="noopener" class="sm-link-btn">@arajetairlines</a>
+              <a href="https://www.instagram.com/explore/tags/arajetairlines/" target="_blank" rel="noopener" class="sm-link-btn">#arajetairlines</a>
+            </div>
+          </div>
+
+          <!-- YouTube -->
+          <div class="social-monitor-card platform-youtube">
+            <div class="sm-card-header">
+              <span class="sm-platform-icon">▶️</span>
+              <div>
+                <h3 class="sm-platform-name">YouTube</h3>
+                <p class="sm-platform-desc">Reseñas de vuelos, noticias en video</p>
+              </div>
+              <span class="sm-priority-badge">🟡 Prioridad Media</span>
+            </div>
+            <div class="sm-search-links">
+              <a href="https://www.youtube.com/results?search_query=arajet&sp=CAI%253D" target="_blank" rel="noopener" class="sm-link-btn primary">🔍 Videos Recientes</a>
+              <a href="https://www.youtube.com/results?search_query=arajet+reseña" target="_blank" rel="noopener" class="sm-link-btn">Reseñas</a>
+              <a href="https://www.youtube.com/results?search_query=arajet+review" target="_blank" rel="noopener" class="sm-link-btn">Reviews EN</a>
+            </div>
+          </div>
+
+          <!-- TikTok -->
+          <div class="social-monitor-card platform-tiktok">
+            <div class="sm-card-header">
+              <span class="sm-platform-icon">🎵</span>
+              <div>
+                <h3 class="sm-platform-name">TikTok</h3>
+                <p class="sm-platform-desc">Contenido viral y experiencias de viaje</p>
+              </div>
+              <span class="sm-priority-badge">🟡 Prioridad Media</span>
+            </div>
+            <div class="sm-search-links">
+              <a href="https://www.tiktok.com/search?q=arajet" target="_blank" rel="noopener" class="sm-link-btn primary">🔍 #arajet</a>
+              <a href="https://www.tiktok.com/tag/arajet" target="_blank" rel="noopener" class="sm-link-btn">Hashtag</a>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
       <!-- ============================================================
            SECTION 7: ACERCA & METODOLOGÍA
            ============================================================ -->
@@ -423,6 +551,8 @@
           </div>
         </div>
       </section>
+
+
 
     </div>
   </main>
