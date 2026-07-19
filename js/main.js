@@ -303,6 +303,13 @@ function initTicker() {
   if (!inner) return;
   const items = [...TICKER_STATIC, ...TICKER_STATIC];
   inner.innerHTML = items.map(t => `<span class="ticker-item">${t}</span>`).join('');
+
+  // Show today's date
+  const dateEl = $('ticker-date');
+  if (dateEl) {
+    const now = new Date();
+    dateEl.textContent = now.toLocaleDateString('es-DO', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  }
 }
 
 function updateTickerWithNews(news) {
@@ -370,9 +377,20 @@ function showFallbackMessage() {
 // RENDER FEATURED
 // ============================================================
 function renderFeatured() {
-  const grid = $('featured-grid');
-  if (!grid) return;
-  grid.innerHTML = state.allNews.slice(0, 3).map((n, i) => createNewsCard(n, i === 0)).join('');
+  const mainEl = $('featured-main');
+  const sideEl = $('featured-side');
+  if (!mainEl || !sideEl) return;
+
+  const top = state.allNews.slice(0, 4);
+  if (top.length === 0) return;
+
+  // First article → large featured card
+  const first = top[0];
+  mainEl.innerHTML = createNewsCard(first, true, 'featured-main-card');
+
+  // 2nd-4th → side small cards
+  sideEl.innerHTML = top.slice(1, 4).map(n => createNewsCard(n, false, 'featured-side-card')).join('');
+
   addCardListeners();
 }
 
@@ -417,14 +435,14 @@ function renderNews() {
 // ============================================================
 // NEWS CARD TEMPLATE
 // ============================================================
-function createNewsCard(news, isFeatured = false) {
+function createNewsCard(news, isFeatured = false, extraClass = '') {
   const slabel = { pos:'👍 Positivo', neg:'👎 Negativo', neu:'😐 Neutral' }[news.sentiment] || '';
   const sclass = { pos:'sentiment-pos', neg:'sentiment-neg', neu:'sentiment-neu' }[news.sentiment] || '';
   const tclass = { rutas:'tag-rutas', precios:'tag-precios', social:'tag-social', incidentes:'tag-incidentes', expansion:'tag-expansion', opinion:'tag-opinion' }[news.category] || '';
   const clabel = { operaciones:'✈ Operaciones', rutas:'🗺 Rutas', precios:'💰 Precios', social:'📱 Social', incidentes:'⚠ Incidente', expansion:'🚀 Expansión', opinion:'💬 Opinión' }[news.category] || news.category;
 
   return `
-    <article class="news-card${isFeatured ? ' featured' : ''}"
+    <article class="news-card ${isFeatured ? ' featured' : ''} ${extraClass}"
              id="card-${news.id}"
              data-url="${escapeAttr(news.url)}"
              data-category="${news.category}"
