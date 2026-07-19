@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Portal de noticias y monitoreo de menciones sobre Arajet, la aerolínea dominicana de ultra bajo costo. Noticias, reseñas y comentarios en tiempo real." />
+  <meta property="og:title" content="Arajet News — Monitor de Noticias" />
+  <meta property="og:description" content="Todas las noticias, comentarios y menciones sobre Arajet en un solo lugar." />
+  <meta property="og:type" content="website" />
+  <title>Arajet News — Monitor de Noticias y Menciones</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="dark-mode">
+
+  <!-- ========== TICKER ========== -->
+  <div class="ticker-bar" id="ticker-bar" aria-label="Últimas noticias">
+    <span class="ticker-label">🔴 EN VIVO</span>
+    <div class="ticker-track" id="ticker-track">
+      <div class="ticker-inner" id="ticker-inner"></div>
+    </div>
+  </div>
+
+  <!-- ========== HEADER ========== -->
+  <header class="site-header" id="site-header">
+    <div class="container header-inner">
+      <div class="brand" id="brand-logo">
+        <div class="brand-icon">✈</div>
+        <div class="brand-text">
+          <span class="brand-name">Arajet</span>
+          <span class="brand-sub">NEWS MONITOR</span>
+        </div>
+      </div>
+
+      <nav class="main-nav" aria-label="Navegación principal">
+        <a href="#noticias" class="nav-link active" id="nav-noticias">Noticias</a>
+        <a href="#estadisticas" class="nav-link" id="nav-stats">Estadísticas</a>
+        <a href="#comentarios" class="nav-link" id="nav-comentarios">Comentarios</a>
+        <a href="#acerca" class="nav-link" id="nav-acerca">Acerca</a>
+      </nav>
+
+      <div class="header-actions">
+        <div class="search-wrapper" id="search-wrapper">
+          <input type="search" id="search-input" class="search-input" placeholder="Buscar noticias…" aria-label="Buscar noticias" />
+          <span class="search-icon" aria-hidden="true">⌕</span>
+        </div>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema" title="Toggle dark/light mode">
+          <span id="theme-icon">☀</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero" id="hero">
+    <div class="hero-particles" id="hero-particles"></div>
+    <div class="container hero-content">
+      <div class="hero-badge" id="hero-badge">
+        <span class="badge-dot"></span> Monitor activo
+      </div>
+      <h1 class="hero-title" id="hero-title">
+        Todas las noticias sobre<br />
+        <span class="gradient-text">Arajet</span> en un solo lugar
+      </h1>
+      <p class="hero-subtitle" id="hero-subtitle">
+        Seguimiento en tiempo real de noticias, menciones, reseñas y comentarios
+        sobre la aerolínea dominicana de ultra bajo costo.
+      </p>
+      <div class="hero-stats" id="hero-stats">
+        <div class="hstat" id="hstat-noticias">
+          <span class="hstat-num" data-target="247">0</span>
+          <span class="hstat-label">Noticias</span>
+        </div>
+        <div class="hstat-divider"></div>
+        <div class="hstat" id="hstat-fuentes">
+          <span class="hstat-num" data-target="38">0</span>
+          <span class="hstat-label">Fuentes</span>
+        </div>
+        <div class="hstat-divider"></div>
+        <div class="hstat" id="hstat-comentarios">
+          <span class="hstat-num" data-target="1842">0</span>
+          <span class="hstat-label">Comentarios</span>
+        </div>
+        <div class="hstat-divider"></div>
+        <div class="hstat" id="hstat-paises">
+          <span class="hstat-num" data-target="12">0</span>
+          <span class="hstat-label">Países</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scroll-hint" aria-hidden="true">
+      <span>↓</span>
+    </div>
+  </section>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <main id="main-content">
+
+    <!-- NOTICIAS SECTION -->
+    <section class="section" id="noticias">
+      <div class="container">
+
+        <!-- Section Header -->
+        <div class="section-header">
+          <div>
+            <h2 class="section-title" id="section-title-noticias">📰 Últimas Noticias</h2>
+            <p class="section-subtitle">Cobertura mediática y menciones sobre Arajet</p>
+          </div>
+          <div class="view-controls" id="view-controls">
+            <button class="view-btn active" id="view-grid" aria-label="Vista cuadrícula" title="Vista cuadrícula">⊞</button>
+            <button class="view-btn" id="view-list" aria-label="Vista lista" title="Vista lista">☰</button>
+          </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar" id="filter-bar" role="group" aria-label="Filtros de categoría">
+          <button class="filter-btn active" data-filter="all" id="filter-all">Todas</button>
+          <button class="filter-btn" data-filter="operaciones" id="filter-ops">✈ Operaciones</button>
+          <button class="filter-btn" data-filter="rutas" id="filter-rutas">🗺 Rutas</button>
+          <button class="filter-btn" data-filter="precios" id="filter-precios">💰 Precios</button>
+          <button class="filter-btn" data-filter="social" id="filter-social">📱 Social Media</button>
+          <button class="filter-btn" data-filter="incidentes" id="filter-incidentes">⚠ Incidentes</button>
+          <button class="filter-btn" data-filter="expansion" id="filter-expansion">🚀 Expansión</button>
+          <button class="filter-btn" data-filter="opinion" id="filter-opinion">💬 Opinión</button>
+        </div>
+
+        <!-- Sort + Count bar -->
+        <div class="results-bar" id="results-bar">
+          <span class="results-count" id="results-count">Cargando noticias…</span>
+          <select class="sort-select" id="sort-select" aria-label="Ordenar noticias">
+            <option value="recent">Más recientes</option>
+            <option value="oldest">Más antiguas</option>
+            <option value="popular">Más populares</option>
+          </select>
+        </div>
+
+        <!-- FEATURED / TRENDING -->
+        <div class="featured-section" id="featured-section">
+          <h3 class="sub-section-title">🔥 Destacadas</h3>
+          <div class="featured-grid" id="featured-grid"></div>
+        </div>
+
+        <!-- NEWS GRID -->
+        <div class="news-grid" id="news-grid"></div>
+
+        <!-- No results -->
+        <div class="no-results hidden" id="no-results">
+          <div class="no-results-icon">🔍</div>
+          <h3>Sin resultados</h3>
+          <p>No se encontraron noticias con ese criterio. Intenta otra búsqueda o cambia los filtros.</p>
+        </div>
+
+        <!-- Load more -->
+        <div class="load-more-wrap" id="load-more-wrap">
+          <button class="btn-load-more" id="btn-load-more">Cargar más noticias</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ESTADÍSTICAS SECTION -->
+    <section class="section section-dark" id="estadisticas">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title" id="section-title-stats">📊 Estadísticas de Menciones</h2>
+            <p class="section-subtitle">Análisis del impacto mediático de Arajet</p>
+          </div>
+        </div>
+
+        <div class="stats-grid" id="stats-grid">
+          <div class="stat-card" id="stat-positivas">
+            <div class="stat-icon">😊</div>
+            <div class="stat-num" data-target="63">0</div>
+            <div class="stat-unit">%</div>
+            <div class="stat-label">Menciones positivas</div>
+            <div class="stat-bar"><div class="stat-bar-fill" style="--fill: 63%"></div></div>
+          </div>
+          <div class="stat-card" id="stat-negativas">
+            <div class="stat-icon">😞</div>
+            <div class="stat-num" data-target="24">0</div>
+            <div class="stat-unit">%</div>
+            <div class="stat-label">Menciones negativas</div>
+            <div class="stat-bar"><div class="stat-bar-fill negative" style="--fill: 24%"></div></div>
+          </div>
+          <div class="stat-card" id="stat-neutrales">
+            <div class="stat-icon">😐</div>
+            <div class="stat-num" data-target="13">0</div>
+            <div class="stat-unit">%</div>
+            <div class="stat-label">Menciones neutrales</div>
+            <div class="stat-bar"><div class="stat-bar-fill neutral" style="--fill: 13%"></div></div>
+          </div>
+          <div class="stat-card" id="stat-alcance">
+            <div class="stat-icon">📡</div>
+            <div class="stat-num" data-target="4">0</div>
+            <div class="stat-unit">M+</div>
+            <div class="stat-label">Alcance estimado</div>
+            <div class="stat-bar"><div class="stat-bar-fill" style="--fill: 80%"></div></div>
+          </div>
+        </div>
+
+        <!-- Source breakdown -->
+        <div class="sources-section" id="sources-section">
+          <h3 class="sub-section-title">Fuentes de Información</h3>
+          <div class="sources-grid" id="sources-grid">
+            <div class="source-item" id="src-twitter">
+              <div class="source-icon">🐦</div>
+              <div class="source-info">
+                <div class="source-name">Twitter / X</div>
+                <div class="source-bar-wrap">
+                  <div class="source-bar"><div class="source-bar-fill" style="--fill: 45%"></div></div>
+                  <span class="source-pct">45%</span>
+                </div>
+              </div>
+            </div>
+            <div class="source-item" id="src-facebook">
+              <div class="source-icon">📘</div>
+              <div class="source-info">
+                <div class="source-name">Facebook</div>
+                <div class="source-bar-wrap">
+                  <div class="source-bar"><div class="source-bar-fill" style="--fill: 22%"></div></div>
+                  <span class="source-pct">22%</span>
+                </div>
+              </div>
+            </div>
+            <div class="source-item" id="src-medios">
+              <div class="source-icon">📰</div>
+              <div class="source-info">
+                <div class="source-name">Medios Digitales</div>
+                <div class="source-bar-wrap">
+                  <div class="source-bar"><div class="source-bar-fill" style="--fill: 18%"></div></div>
+                  <span class="source-pct">18%</span>
+                </div>
+              </div>
+            </div>
+            <div class="source-item" id="src-instagram">
+              <div class="source-icon">📸</div>
+              <div class="source-info">
+                <div class="source-name">Instagram</div>
+                <div class="source-bar-wrap">
+                  <div class="source-bar"><div class="source-bar-fill" style="--fill: 10%"></div></div>
+                  <span class="source-pct">10%</span>
+                </div>
+              </div>
+            </div>
+            <div class="source-item" id="src-youtube">
+              <div class="source-icon">▶</div>
+              <div class="source-info">
+                <div class="source-name">YouTube</div>
+                <div class="source-bar-wrap">
+                  <div class="source-bar"><div class="source-bar-fill" style="--fill: 5%"></div></div>
+                  <span class="source-pct">5%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMENTARIOS SECTION -->
+    <section class="section" id="comentarios">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title" id="section-title-comentarios">💬 Comentarios Públicos</h2>
+            <p class="section-subtitle">Opiniones recopiladas de redes sociales y medios</p>
+          </div>
+        </div>
+        <div class="comments-grid" id="comments-grid"></div>
+      </div>
+    </section>
+
+    <!-- ACERCA SECTION -->
+    <section class="section section-dark" id="acerca">
+      <div class="container">
+        <div class="about-card" id="about-card">
+          <div class="about-icon">✈</div>
+          <h2 class="about-title">Sobre Arajet News Monitor</h2>
+          <p class="about-text">
+            Este portal fue creado para centralizar y monitorear todas las noticias, menciones,
+            reseñas y comentarios relacionados con <strong>Arajet</strong>, la aerolínea
+            dominicana de ultra bajo costo que opera vuelos regionales e internacionales desde
+            el <strong>Aeropuerto Internacional Las Américas (SDQ)</strong>.
+          </p>
+          <p class="about-text">
+            Arajet fue fundada en <strong>2022</strong> y se ha posicionado como la primera
+            aerolínea ULCC (Ultra Low Cost Carrier) del Caribe, conectando República Dominicana
+            con destinos en América Latina, el Caribe y América del Norte.
+          </p>
+          <div class="about-tags" id="about-tags">
+            <span class="tag">#Arajet</span>
+            <span class="tag">#ULCC</span>
+            <span class="tag">#RepublicaDominicana</span>
+            <span class="tag">#Aviacion</span>
+            <span class="tag">#SDQ</span>
+            <span class="tag">#Caribe</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="site-footer" id="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="brand-icon-sm">✈</span>
+        <span class="footer-name">Arajet News Monitor</span>
+      </div>
+      <p class="footer-text">
+        Portal independiente de monitoreo de noticias. No afiliado oficialmente con Arajet.
+      </p>
+      <p class="footer-copy">© 2024 Arajet News Monitor · Hecho con ❤ en República Dominicana</p>
+    </div>
+  </footer>
+
+  <!-- Scroll to top -->
+  <button class="scroll-top" id="scroll-top" aria-label="Volver arriba" title="Volver arriba">↑</button>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
