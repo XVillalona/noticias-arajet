@@ -1462,3 +1462,26 @@ ul { list-style: none; }
 .news-card[data-url] {
   cursor: pointer;
 }
+
+/* Comment external link icon */
+.comment-ext-icon {
+  margin-left: auto;
+  font-size: 16px;
+  color: var(--text-muted);
+  opacity: 0;
+  transform: translateY(-2px);
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.comment-card:hover .comment-ext-icon {
+  opacity: 1;
+  color: var(--color-primary);
+  transform: translateY(0);
+}
+
+.comment-card[data-url]:hover {
+  border-color: var(--border-glow);
+  cursor: pointer;
+}
+
