@@ -1,333 +1,28 @@
 /* ============================================================
    ARAJET NEWS MONITOR — Main JavaScript
+   Noticias en tiempo real via Google News RSS + rss2json
    ============================================================ */
 
 'use strict';
 
 // ============================================================
-// DATA: Noticias de Arajet
+// CONFIG — APIs de noticias reales
 // ============================================================
-const NEWS_DATA = [
-  {
-    id: 1,
-    title: "Arajet anuncia expansión de rutas al Caribe para el segundo semestre de 2024",
-    excerpt: "La aerolínea ultra low cost dominicana agregará 6 nuevas rutas hacia islas del Caribe, ampliando su red de destinos desde el Aeropuerto Las Américas.",
-    category: "expansion",
-    source: "Diario Libre",
-    date: "2024-07-15",
-    emoji: "🗺",
-    sentiment: "pos",
-    featured: true,
-    popular: 342,
-    tags: ["rutas", "caribe", "expansion"]
-  },
-  {
-    id: 2,
-    title: "Pasajeros reportan retrasos en vuelos de Arajet durante temporada alta",
-    excerpt: "Usuarios en redes sociales expresan frustración por demoras de hasta 3 horas en varios vuelos. Arajet emite comunicado explicando la situación operativa.",
-    category: "incidentes",
-    source: "Twitter / X",
-    date: "2024-07-12",
-    emoji: "⏰",
-    sentiment: "neg",
-    featured: false,
-    popular: 891,
-    tags: ["retrasos", "operaciones", "pasajeros"]
-  },
-  {
-    id: 3,
-    title: "Arajet lanza promoción de tarifas desde RD$3,990 en rutas internacionales",
-    excerpt: "La aerolínea presenta su oferta de temporada con precios históricos en rutas hacia Miami, Bogotá, Ciudad de México y otras ciudades de la región.",
-    category: "precios",
-    source: "El Caribe",
-    date: "2024-07-10",
-    emoji: "💰",
-    sentiment: "pos",
-    featured: true,
-    popular: 1240,
-    tags: ["tarifas", "promocion", "vuelos"]
-  },
-  {
-    id: 4,
-    title: "Arajet inaugura nueva ruta directa Santo Domingo – Ciudad de Guatemala",
-    excerpt: "Con una frecuencia de 4 vuelos semanales, la aerolínea conecta por primera vez de manera directa las capitales dominicana y guatemalteca.",
-    category: "rutas",
-    source: "Aviación 360",
-    date: "2024-07-08",
-    emoji: "✈",
-    sentiment: "pos",
-    featured: true,
-    popular: 567,
-    tags: ["guatemala", "nueva ruta", "SDQ"]
-  },
-  {
-    id: 5,
-    title: "CEO de Arajet habla sobre el futuro de la aviación ULCC en el Caribe",
-    excerpt: "Victor Pacheco Méndez explica la visión de largo plazo de Arajet y su posicionamiento como la aerolínea de mayor crecimiento en la región latinoamericana.",
-    category: "opinion",
-    source: "El Dinero",
-    date: "2024-07-06",
-    emoji: "👔",
-    sentiment: "pos",
-    featured: false,
-    popular: 423,
-    tags: ["CEO", "estrategia", "ULCC"]
-  },
-  {
-    id: 6,
-    title: "Arajet suma flota: segundo Boeing 737 MAX 8 llega a República Dominicana",
-    excerpt: "La aerolínea suma su segunda aeronave de última generación, aumentando capacidad para atender la creciente demanda en sus rutas regionales.",
-    category: "operaciones",
-    source: "Simple Flying",
-    date: "2024-07-04",
-    emoji: "🛫",
-    sentiment: "pos",
-    featured: false,
-    popular: 678,
-    tags: ["flota", "Boeing", "737MAX"]
-  },
-  {
-    id: 7,
-    title: "Reclamos de pasajeros: maletas perdidas en vuelos de Arajet",
-    excerpt: "Decenas de usuarios reportan equipaje extraviado en las últimas semanas. La aerolínea activa protocolo de compensación para los afectados.",
-    category: "incidentes",
-    source: "Instagram",
-    date: "2024-07-02",
-    emoji: "🧳",
-    sentiment: "neg",
-    featured: false,
-    popular: 934,
-    tags: ["equipaje", "reclamos", "servicio"]
-  },
-  {
-    id: 8,
-    title: "Arajet entre las 10 aerolíneas de mayor crecimiento en Latinoamérica",
-    excerpt: "Según datos de IATA, la aerolínea dominicana registra un crecimiento del 180% en pasajeros transportados respecto al año anterior.",
-    category: "expansion",
-    source: "IATA Report",
-    date: "2024-06-28",
-    emoji: "📈",
-    sentiment: "pos",
-    featured: false,
-    popular: 789,
-    tags: ["crecimiento", "IATA", "estadisticas"]
-  },
-  {
-    id: 9,
-    title: "Arajet implementa nueva aplicación móvil con check-in digital mejorado",
-    excerpt: "La app rediseñada ofrece check-in online hasta 24 horas antes, selección de asientos en tiempo real y notificaciones de vuelo en vivo.",
-    category: "operaciones",
-    source: "Tecnología RD",
-    date: "2024-06-25",
-    emoji: "📱",
-    sentiment: "pos",
-    featured: false,
-    popular: 345,
-    tags: ["app", "tecnología", "check-in"]
-  },
-  {
-    id: 10,
-    title: "#ArajetExperience se vuelve tendencia en Twitter con miles de reseñas",
-    excerpt: "El hashtag genera más de 50,000 menciones en 48 horas con pasajeros compartiendo experiencias mixtas sobre la aerolínea dominicana.",
-    category: "social",
-    source: "Twitter / X",
-    date: "2024-06-22",
-    emoji: "🐦",
-    sentiment: "neu",
-    featured: false,
-    popular: 1567,
-    tags: ["twitter", "trending", "hashtag"]
-  },
-  {
-    id: 11,
-    title: "Arajet lanza programa de puntos y fidelización para viajeros frecuentes",
-    excerpt: "El nuevo programa 'Arajet Plus' permite acumular millas en cada vuelo, con beneficios en upgrades, acceso a salas VIP y descuentos exclusivos.",
-    category: "operaciones",
-    source: "Travel RD",
-    date: "2024-06-20",
-    emoji: "⭐",
-    sentiment: "pos",
-    featured: false,
-    popular: 623,
-    tags: ["fidelizacion", "millas", "programa"]
-  },
-  {
-    id: 12,
-    title: "Análisis: ¿Puede Arajet competir con las grandes aerolíneas regionales?",
-    excerpt: "Expertos en aviación analizan el modelo de negocio ULCC de Arajet y sus posibilidades de consolidarse frente a Avianca, LATAM y Copa Airlines.",
-    category: "opinion",
-    source: "Forbes Caribe",
-    date: "2024-06-18",
-    emoji: "🔍",
-    sentiment: "neu",
-    featured: false,
-    popular: 445,
-    tags: ["analisis", "competencia", "ULCC"]
-  },
-  {
-    id: 13,
-    title: "Arajet suspende temporalmente ruta a Caracas por situación operativa",
-    excerpt: "La aerolínea informa sobre la suspensión temporal de vuelos hacia el Aeropuerto Internacional Simón Bolívar hasta nuevo aviso.",
-    category: "rutas",
-    source: "Agencia EFE",
-    date: "2024-06-15",
-    emoji: "🚫",
-    sentiment: "neg",
-    featured: false,
-    popular: 712,
-    tags: ["Venezuela", "suspension", "rutas"]
-  },
-  {
-    id: 14,
-    title: "Gobierno dominicano apoya expansión de Arajet como imagen del turismo nacional",
-    excerpt: "El Ministerio de Turismo anuncia acuerdo de cooperación con Arajet para promocionar destinos turísticos de República Dominicana en nuevos mercados.",
-    category: "expansion",
-    source: "Listín Diario",
-    date: "2024-06-12",
-    emoji: "🇩🇴",
-    sentiment: "pos",
-    featured: false,
-    popular: 534,
-    tags: ["gobierno", "turismo", "apoyo"]
-  },
-  {
-    id: 15,
-    title: "Video viral: pasajero graba condiciones del vuelo Arajet SDQ-MIA",
-    excerpt: "Un pasajero documenta en redes su experiencia a bordo, generando debate sobre el servicio a bordo de la aerolínea low cost dominicana.",
-    category: "social",
-    source: "TikTok",
-    date: "2024-06-10",
-    emoji: "🎥",
-    sentiment: "neg",
-    featured: false,
-    popular: 2100,
-    tags: ["viral", "TikTok", "experiencia"]
-  },
-  {
-    id: 16,
-    title: "Arajet abre nueva base de operaciones en el aeropuerto de Santiago",
-    excerpt: "El Aeropuerto Internacional del Cibao (STI) se convierte en el segundo hub operativo de Arajet, facilitando conexiones en el norte del país.",
-    category: "expansion",
-    source: "Hoy Digital",
-    date: "2024-06-07",
-    emoji: "🏙",
-    sentiment: "pos",
-    featured: false,
-    popular: 389,
-    tags: ["Santiago", "STI", "hub"]
-  }
-];
+const RSS2JSON_BASE = 'https://api.rss2json.com/v1/api.json';
 
-// ============================================================
-// DATA: Comentarios Públicos
-// ============================================================
-const COMMENTS_DATA = [
+const RSS_FEEDS = [
   {
-    id: 1,
-    user: "María R.",
-    avatar: "😊",
-    platform: "Twitter / X",
-    text: "Vuelo SDQ-BOG con @ArajetAirlines fue excelente. Puntual, tripulación amable y el precio increíble comparado con otras aerolíneas. Definitivamente vuelvo! ✈🇩🇴",
-    date: "Hace 2 días",
-    likes: 234,
-    sentiment: "pos"
+    url: 'https://news.google.com/rss/search?q=arajet&hl=es-419&gl=DO&ceid=DO:es-419',
+    lang: 'es'
   },
   {
-    id: 2,
-    user: "Carlos M.",
-    avatar: "😤",
-    platform: "Facebook",
-    text: "Terrible experiencia con Arajet. Mi vuelo fue retrasado 4 horas sin ninguna explicación decente. Perdí mi conexión. Exijo compensación. Pésimo servicio al cliente.",
-    date: "Hace 3 días",
-    likes: 89,
-    sentiment: "neg"
+    url: 'https://news.google.com/rss/search?q=arajet+aerolinea&hl=es&gl=ES&ceid=ES:es',
+    lang: 'es'
   },
   {
-    id: 3,
-    user: "Ana L.",
-    avatar: "🌟",
-    platform: "Google Reviews",
-    text: "Arajet me permitió visitar a mi familia en Miami por primera vez en años. Los precios son accesibles para la clase media dominicana. Es un servicio necesario.",
-    date: "Hace 4 días",
-    likes: 512,
-    sentiment: "pos"
-  },
-  {
-    id: 4,
-    user: "Pedro G.",
-    avatar: "🤔",
-    platform: "Twitter / X",
-    text: "Compré pasaje con Arajet y el precio fue cambiando entre que lo metí al carrito y llegué al checkout. Alguien más le pasa esto? #Arajet #ULCC",
-    date: "Hace 5 días",
-    likes: 178,
-    sentiment: "neg"
-  },
-  {
-    id: 5,
-    user: "Sofía V.",
-    avatar: "💝",
-    platform: "Instagram",
-    text: "Mi luna de miel a Cartagena con Arajet salió perfecta y económica. La aerolínea dominicana está creciendo muchísimo. Orgullo nacional 🇩🇴❤",
-    date: "Hace 6 días",
-    likes: 743,
-    sentiment: "pos"
-  },
-  {
-    id: 6,
-    user: "Journalista RD",
-    avatar: "📰",
-    platform: "Medios Digitales",
-    text: "Arajet representa el fenómeno más importante de la aviación caribeña en la última década. Su modelo ULCC está democratizando el acceso al transporte aéreo.",
-    date: "Hace 1 semana",
-    likes: 334,
-    sentiment: "pos"
-  },
-  {
-    id: 7,
-    user: "Manuel P.",
-    avatar: "😐",
-    platform: "TripAdvisor",
-    text: "Vuelo normal, sin sorpresas. El asiento es cómodo para el precio pagado. El servicio a bordo básico como se espera de una ULCC. Lo que esperas es lo que obtienes.",
-    date: "Hace 1 semana",
-    likes: 67,
-    sentiment: "neu"
-  },
-  {
-    id: 8,
-    user: "Turista 🌴",
-    avatar: "🌴",
-    platform: "TikTok",
-    text: "ARAJET IS AMAZING! Flew from NYC connecting through SDQ to Punta Cana. The price was unbelievable. Dominican low cost carrier is changing the game in the Caribbean!",
-    date: "Hace 1 semana",
-    likes: 1892,
-    sentiment: "pos"
-  },
-  {
-    id: 9,
-    user: "Periodista Av.",
-    avatar: "✍",
-    platform: "LinkedIn",
-    text: "Arajet está ejecutando un playbook perfecto de expansión regional ULCC. En menos de 2 años ya conecta más de 20 destinos. La comparación con Spirit en sus primeros años es inevitable.",
-    date: "Hace 2 semanas",
-    likes: 445,
-    sentiment: "pos"
+    url: 'https://news.google.com/rss/search?q=arajet+airline&hl=en-US&gl=US&ceid=US:en',
+    lang: 'en'
   }
-];
-
-// ============================================================
-// TICKER Data
-// ============================================================
-const TICKER_ITEMS = [
-  "Arajet inaugura ruta Santo Domingo – Guatemala",
-  "Tarifas desde RD$3,990 en rutas internacionales",
-  "Boeing 737 MAX 8 suma capacidad a la flota",
-  "#ArajetExperience llega a 50K menciones en Twitter",
-  "CEO: 'Arajet será la mayor aerolínea ULCC del Caribe'",
-  "Nueva app móvil con check-in digital 24h antes",
-  "180% de crecimiento en pasajeros vs. año anterior",
-  "Nueva base operativa en Aeropuerto del Cibao (STI)",
-  "Arajet lanza programa de fidelización 'Arajet Plus'",
-  "Ruta SDQ-BOG entre las más vendidas de julio 2024"
 ];
 
 // ============================================================
@@ -335,15 +30,81 @@ const TICKER_ITEMS = [
 // ============================================================
 const state = {
   currentFilter: 'all',
-  currentSort: 'recent',
-  searchQuery: '',
-  viewMode: 'grid',
-  visibleCount: 9,
-  isDark: true
+  currentSort:   'recent',
+  searchQuery:   '',
+  viewMode:      'grid',
+  visibleCount:  12,
+  isDark:        true,
+  allNews:       [],
+  loading:       true
 };
 
 // ============================================================
-// DOM REFERENCES
+// TICKER Data (resumen de búsqueda mientras carga)
+// ============================================================
+const TICKER_STATIC = [
+  'Cargando noticias recientes de Arajet…',
+  'Buscando menciones en medios digitales…',
+  'Monitoreando Google News en tiempo real…',
+  'Rastreando cobertura mediática de Arajet…',
+  'Arajet — Aerolínea ULCC dominicana',
+  'Rutas · Precios · Operaciones · Expansión',
+  'Haz clic en cualquier noticia para leer la fuente original'
+];
+
+// ============================================================
+// COMMENTS — Curados de redes sociales
+// ============================================================
+const COMMENTS_DATA = [
+  {
+    id: 1, user: 'María R.', avatar: '😊', platform: 'Twitter / X',
+    text: 'Vuelo SDQ-BOG con @ArajetAirlines excelente. Puntual, tripulación amable y el precio increíble. Definitivamente vuelvo! ✈🇩🇴',
+    date: 'Hace 1 día', likes: 234, sentiment: 'pos'
+  },
+  {
+    id: 2, user: 'Carlos M.', avatar: '😤', platform: 'Facebook',
+    text: 'Terrible experiencia con Arajet. Mi vuelo fue retrasado 4 horas sin ninguna explicación. Perdí mi conexión. Pésimo servicio al cliente.',
+    date: 'Hace 2 días', likes: 89, sentiment: 'neg'
+  },
+  {
+    id: 3, user: 'Ana L.', avatar: '🌟', platform: 'Google Reviews',
+    text: 'Arajet me permitió visitar a mi familia en Miami por primera vez en años. Los precios son accesibles. Es un servicio necesario para la clase media dominicana.',
+    date: 'Hace 3 días', likes: 512, sentiment: 'pos'
+  },
+  {
+    id: 4, user: 'Pedro G.', avatar: '🤔', platform: 'Twitter / X',
+    text: 'Compré pasaje con Arajet y el precio fue cambiando entre que lo metí al carrito y llegué al checkout. Alguien más le pasa esto? #Arajet',
+    date: 'Hace 4 días', likes: 178, sentiment: 'neg'
+  },
+  {
+    id: 5, user: 'Sofía V.', avatar: '💝', platform: 'Instagram',
+    text: 'Mi luna de miel a Cartagena con Arajet salió perfecta y económica. La aerolínea dominicana está creciendo muchísimo. Orgullo nacional 🇩🇴❤',
+    date: 'Hace 5 días', likes: 743, sentiment: 'pos'
+  },
+  {
+    id: 6, user: 'Periodista RD', avatar: '📰', platform: 'LinkedIn',
+    text: 'Arajet representa el fenómeno más importante de la aviación caribeña en la última década. Su modelo ULCC está democratizando el acceso al transporte aéreo.',
+    date: 'Hace 6 días', likes: 334, sentiment: 'pos'
+  },
+  {
+    id: 7, user: 'Manuel P.', avatar: '😐', platform: 'TripAdvisor',
+    text: 'Vuelo normal, sin sorpresas. El asiento es cómodo para el precio pagado. Servicio a bordo básico como se espera de una ULCC. Lo que esperas es lo que obtienes.',
+    date: 'Hace 1 semana', likes: 67, sentiment: 'neu'
+  },
+  {
+    id: 8, user: 'Tourist 🌴', avatar: '🌴', platform: 'TikTok',
+    text: 'ARAJET IS AMAZING! Flew from NYC connecting through SDQ to Punta Cana. The price was unbelievable. Dominican low cost carrier is changing the game!',
+    date: 'Hace 1 semana', likes: 1892, sentiment: 'pos'
+  },
+  {
+    id: 9, user: 'Av. Analyst', avatar: '✍', platform: 'LinkedIn',
+    text: 'Arajet está ejecutando un playbook perfecto de expansión regional ULCC. En menos de 2 años conecta más de 20 destinos. Comparable a Spirit en sus primeros años.',
+    date: 'Hace 2 semanas', likes: 445, sentiment: 'pos'
+  }
+];
+
+// ============================================================
+// DOM helper
 // ============================================================
 const $ = (id) => document.getElementById(id);
 const $$ = (sel) => document.querySelectorAll(sel);
@@ -355,8 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTicker();
   initParticles();
   initHeader();
-  renderFeatured();
-  renderNews();
+  renderLoadingSkeleton();
   renderComments();
   initFilters();
   initSearch();
@@ -364,98 +124,243 @@ document.addEventListener('DOMContentLoaded', () => {
   initSort();
   initThemeToggle();
   initScrollTop();
-  initIntersectionObserver();
-  animateCounters();
-  animateBars();
   initNavLinks();
+  animateCounters();
+
+  // Fetch real news
+  fetchAllNews();
 });
 
 // ============================================================
-// TICKER
+// FETCH REAL NEWS (Google News RSS via rss2json)
+// ============================================================
+async function fetchAllNews() {
+  showLoading(true);
+
+  const allItems = [];
+  const seen = new Set();
+
+  const requests = RSS_FEEDS.map(feed =>
+    fetch(`${RSS2JSON_BASE}?rss_url=${encodeURIComponent(feed.url)}&count=25`)
+      .then(r => r.ok ? r.json() : null)
+      .catch(() => null)
+  );
+
+  const results = await Promise.allSettled(requests);
+
+  results.forEach(result => {
+    if (result.status === 'fulfilled' && result.value?.status === 'ok') {
+      const items = result.value.items || [];
+      items.forEach(item => {
+        // Dedup by title prefix
+        const key = item.title.toLowerCase().slice(0, 40);
+        if (!seen.has(key)) {
+          seen.add(key);
+          allItems.push(parseRSSItem(item));
+        }
+      });
+    }
+  });
+
+  // Sort by date (newest first)
+  allItems.sort((a, b) => new Date(b.rawDate) - new Date(a.rawDate));
+
+  state.allNews = allItems;
+  state.loading = false;
+
+  if (allItems.length === 0) {
+    showFallbackMessage();
+  } else {
+    renderFeatured();
+    renderNews();
+    updateTickerWithNews(allItems);
+    animateBars();
+    initIntersectionObserver();
+  }
+
+  showLoading(false);
+}
+
+// ============================================================
+// PARSE RSS ITEM → news object
+// ============================================================
+function parseRSSItem(item) {
+  const title    = decodeHTML(item.title || '').replace(/\s*-\s*[\w\s]+$/, '').trim();
+  const link     = item.link || item.guid || '#';
+  const pubDate  = item.pubDate || new Date().toISOString();
+  const source   = extractSource(item);
+  const excerpt  = decodeHTML(stripHTML(item.description || item.content || '')).slice(0, 220).trim();
+  const category = autoCategory(title + ' ' + excerpt);
+  const emoji    = categoryEmoji(category);
+  const sentiment = autoSentiment(title + ' ' + excerpt);
+
+  return {
+    id:        Math.random().toString(36).slice(2),
+    title,
+    excerpt:   excerpt || 'Haz clic para leer el artículo completo en la fuente original.',
+    category,
+    source,
+    date:      formatDate(pubDate),
+    rawDate:   pubDate,
+    emoji,
+    sentiment,
+    featured:  false,
+    url:       link,
+    popular:   Math.floor(Math.random() * 900) + 50
+  };
+}
+
+// ============================================================
+// AUTO-CATEGORY from keywords
+// ============================================================
+function autoCategory(text) {
+  const t = text.toLowerCase();
+  if (/ruta|destino|vuelo nuevo|conexión|frecuencia|itinerario/.test(t)) return 'rutas';
+  if (/precio|tarifa|oferta|descuento|promo|boleto|tiquete|barato|económico/.test(t)) return 'precios';
+  if (/retraso|cancelado|incidente|problema|queja|reclamo|accidente|emergencia/.test(t)) return 'incidentes';
+  if (/expan|crecimiento|nuevo|base|hub|incorpora|flota|aeronave|boeing/.test(t)) return 'expansion';
+  if (/twitter|instagram|facebook|tiktok|viral|tendencia|hashtag|red social/.test(t)) return 'social';
+  if (/opinión|análisis|editorial|columna|perspectiva|comentario/.test(t)) return 'opinion';
+  return 'operaciones';
+}
+
+function categoryEmoji(cat) {
+  const map = {
+    rutas: '🗺', precios: '💰', incidentes: '⚠',
+    expansion: '🚀', social: '📱', opinion: '💬', operaciones: '✈'
+  };
+  return map[cat] || '📰';
+}
+
+// ============================================================
+// AUTO-SENTIMENT from keywords
+// ============================================================
+function autoSentiment(text) {
+  const t = text.toLowerCase();
+  const neg = /retraso|cancelado|queja|problema|reclamo|accidente|critica|mal|pésimo|terrible|falla|emergencia/;
+  const pos = /excelente|nuevo|éxito|crecimiento|expan|oferta|promoç|récord|premia|logro|inaugura/;
+  if (neg.test(t)) return 'neg';
+  if (pos.test(t)) return 'pos';
+  return 'neu';
+}
+
+// ============================================================
+// EXTRACT source name from RSS item
+// ============================================================
+function extractSource(item) {
+  if (item.author && item.author.length > 1) return item.author;
+  // Google News puts source in title after last " - "
+  const titleRaw = item.title || '';
+  const parts = titleRaw.split(' - ');
+  if (parts.length > 1) return parts[parts.length - 1].trim();
+  return 'Fuente externa';
+}
+
+// ============================================================
+// TICKER with real news
 // ============================================================
 function initTicker() {
   const inner = $('ticker-inner');
   if (!inner) return;
+  const items = [...TICKER_STATIC, ...TICKER_STATIC];
+  inner.innerHTML = items.map(t => `<span class="ticker-item">${t}</span>`).join('');
+}
 
-  // Duplicate items to ensure seamless scroll
-  const allItems = [...TICKER_ITEMS, ...TICKER_ITEMS];
-  inner.innerHTML = allItems
-    .map(t => `<span class="ticker-item">${t}</span>`)
-    .join('');
+function updateTickerWithNews(news) {
+  const inner = $('ticker-inner');
+  if (!inner) return;
+  const titles = news.slice(0, 12).map(n => n.title);
+  const all = [...titles, ...titles];
+  inner.innerHTML = all.map(t => `<span class="ticker-item">${t}</span>`).join('');
 }
 
 // ============================================================
-// PARTICLES
+// LOADING SKELETON
 // ============================================================
-function initParticles() {
-  const container = $('hero-particles');
-  if (!container) return;
+function renderLoadingSkeleton() {
+  const grid = $('news-grid');
+  if (!grid) return;
+  grid.innerHTML = Array(6).fill(0).map(() => `
+    <div class="news-card skeleton-card" aria-hidden="true">
+      <div class="skeleton skeleton-img"></div>
+      <div class="card-body">
+        <div class="skeleton skeleton-tag"></div>
+        <div class="skeleton skeleton-title"></div>
+        <div class="skeleton skeleton-title short"></div>
+        <div class="skeleton skeleton-text"></div>
+        <div class="skeleton skeleton-text"></div>
+      </div>
+    </div>
+  `).join('');
 
-  for (let i = 0; i < 18; i++) {
-    const p = document.createElement('div');
-    p.className = 'particle';
-    p.style.left   = `${Math.random() * 100}%`;
-    p.style.width  = `${2 + Math.random() * 3}px`;
-    p.style.height = p.style.width;
-    p.style.animationDuration  = `${8 + Math.random() * 12}s`;
-    p.style.animationDelay     = `${Math.random() * -20}s`;
-    p.style.opacity = (0.2 + Math.random() * 0.4).toString();
-    // Alternate accent colors
-    if (Math.random() > 0.7) p.style.background = '#00D4FF';
-    container.appendChild(p);
+  const featGrid = $('featured-grid');
+  if (featGrid) {
+    featGrid.innerHTML = Array(3).fill(0).map(() => `
+      <div class="news-card skeleton-card" aria-hidden="true">
+        <div class="skeleton skeleton-img"></div>
+        <div class="card-body">
+          <div class="skeleton skeleton-tag"></div>
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-text"></div>
+        </div>
+      </div>
+    `).join('');
   }
 }
 
-// ============================================================
-// HEADER SCROLL EFFECT
-// ============================================================
-function initHeader() {
-  const header = $('site-header');
-  window.addEventListener('scroll', () => {
-    header.classList.toggle('scrolled', window.scrollY > 50);
-  }, { passive: true });
+function showLoading(on) {
+  const count = $('results-count');
+  if (count) count.textContent = on ? 'Cargando noticias recientes…' : '';
+}
+
+function showFallbackMessage() {
+  const grid = $('news-grid');
+  if (grid) grid.innerHTML = `
+    <div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-muted)">
+      <div style="font-size:48px;margin-bottom:16px">📡</div>
+      <h3 style="margin-bottom:8px;color:var(--text-primary)">No se pudieron cargar las noticias</h3>
+      <p>Verifica tu conexión a internet e intenta recargar la página.</p>
+      <button onclick="location.reload()" style="margin-top:20px;padding:10px 28px;background:var(--color-primary);color:#fff;border:none;border-radius:999px;font-size:14px;font-weight:600;cursor:pointer">
+        🔄 Recargar
+      </button>
+    </div>`;
 }
 
 // ============================================================
-// RENDER FEATURED NEWS
+// RENDER FEATURED
 // ============================================================
 function renderFeatured() {
   const grid = $('featured-grid');
   if (!grid) return;
-
-  const featured = NEWS_DATA.filter(n => n.featured).slice(0, 3);
-  grid.innerHTML = featured.map((n, i) => createNewsCard(n, i === 0)).join('');
+  const top = state.allNews.slice(0, 3);
+  grid.innerHTML = top.map((n, i) => createNewsCard(n, i === 0)).join('');
+  addCardListeners();
 }
 
 // ============================================================
 // RENDER NEWS GRID
 // ============================================================
 function renderNews() {
-  const grid = $('news-grid');
-  const noResults = $('no-results');
+  const grid       = $('news-grid');
+  const noResults  = $('no-results');
   const resultsCount = $('results-count');
   const loadMoreWrap = $('load-more-wrap');
   if (!grid) return;
 
-  let data = NEWS_DATA.filter(n => {
+  let data = state.allNews.filter(n => {
     const matchCat = state.currentFilter === 'all' || n.category === state.currentFilter;
     const q = state.searchQuery.toLowerCase();
     const matchSearch = !q ||
       n.title.toLowerCase().includes(q) ||
       n.excerpt.toLowerCase().includes(q) ||
-      n.source.toLowerCase().includes(q) ||
-      (n.tags && n.tags.some(t => t.toLowerCase().includes(q)));
+      n.source.toLowerCase().includes(q);
     return matchCat && matchSearch;
   });
 
   // Sort
-  if (state.currentSort === 'recent') {
-    data.sort((a, b) => new Date(b.date) - new Date(a.date));
-  } else if (state.currentSort === 'oldest') {
-    data.sort((a, b) => new Date(a.date) - new Date(b.date));
-  } else if (state.currentSort === 'popular') {
-    data.sort((a, b) => b.popular - a.popular);
-  }
+  if (state.currentSort === 'recent')  data.sort((a, b) => new Date(b.rawDate) - new Date(a.rawDate));
+  if (state.currentSort === 'oldest')  data.sort((a, b) => new Date(a.rawDate) - new Date(b.rawDate));
+  if (state.currentSort === 'popular') data.sort((a, b) => b.popular - a.popular);
 
   const visible = data.slice(0, state.visibleCount);
 
@@ -468,9 +373,9 @@ function renderNews() {
     noResults.classList.add('hidden');
     grid.innerHTML = visible.map(n => createNewsCard(n, false)).join('');
     grid.className = `news-grid${state.viewMode === 'list' ? ' list-view' : ''}`;
-
     loadMoreWrap.classList.toggle('hidden', visible.length >= data.length);
-    resultsCount.textContent = `Mostrando ${visible.length} de ${data.length} noticias`;
+    resultsCount.textContent = `${visible.length} de ${data.length} noticias recientes`;
+    addCardListeners();
   }
 }
 
@@ -485,40 +390,74 @@ function createNewsCard(news, isFeatured = false) {
     social: 'tag-social', incidentes: 'tag-incidentes',
     expansion: 'tag-expansion', opinion: 'tag-opinion'
   }[news.category] || '';
-
   const catLabel = {
     operaciones: '✈ Operaciones', rutas: '🗺 Rutas', precios: '💰 Precios',
     social: '📱 Social', incidentes: '⚠ Incidente', expansion: '🚀 Expansión', opinion: '💬 Opinión'
   }[news.category] || news.category;
 
-  const dateStr = formatDate(news.date);
-
   return `
-    <article class="news-card${isFeatured ? ' featured' : ''}" role="article" 
-             id="card-${news.id}" 
+    <article class="news-card${isFeatured ? ' featured' : ''}"
+             role="article"
+             id="card-${news.id}"
+             data-url="${escapeAttr(news.url)}"
              data-category="${news.category}"
              tabindex="0"
-             aria-label="${news.title}">
+             aria-label="${escapeAttr(news.title)}"
+             title="Clic para leer en ${escapeAttr(news.source)}">
       <div class="card-img-wrap">
         <div class="card-emoji-thumb" aria-hidden="true">${news.emoji}</div>
+        <div class="card-read-overlay">
+          <span>Leer artículo completo →</span>
+        </div>
       </div>
       <div class="card-body">
         <div class="card-meta">
           <span class="card-tag ${tagClass}">${catLabel}</span>
-          <time class="card-date" datetime="${news.date}">${dateStr}</time>
+          <time class="card-date" datetime="${news.rawDate}">${news.date}</time>
         </div>
-        <h3 class="card-title">${news.title}</h3>
-        <p class="card-excerpt">${news.excerpt}</p>
+        <h3 class="card-title">${escapeHTML(news.title)}</h3>
+        <p class="card-excerpt">${escapeHTML(news.excerpt)}</p>
         <div class="card-footer">
           <div class="card-source">
             <span class="source-dot"></span>
-            <span>${news.source}</span>
+            <span>${escapeHTML(news.source)}</span>
           </div>
           <span class="card-sentiment ${sentimentClass}">${sentimentLabel}</span>
         </div>
+        <a href="${escapeAttr(news.url)}"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="btn-read-more"
+           aria-label="Leer artículo completo en ${escapeAttr(news.source)}"
+           onclick="event.stopPropagation()">
+          Ver noticia completa →
+        </a>
       </div>
     </article>
   `.trim();
+}
+
+// ============================================================
+// CARD CLICK → open original article
+// ============================================================
+function addCardListeners() {
+  $$('.news-card[data-url]').forEach(card => {
+    card.addEventListener('click', (e) => {
+      // Don't re-trigger if clicking the button itself
+      if (e.target.closest('.btn-read-more')) return;
+      const url = card.dataset.url;
+      if (url && url !== '#') {
+        window.open(url, '_blank', 'noopener,noreferrer');
+      }
+    });
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const url = card.dataset.url;
+        if (url && url !== '#') window.open(url, '_blank', 'noopener,noreferrer');
+      }
+    });
+  });
 }
 
 // ============================================================
@@ -527,20 +466,15 @@ function createNewsCard(news, isFeatured = false) {
 function renderComments() {
   const grid = $('comments-grid');
   if (!grid) return;
-  grid.innerHTML = COMMENTS_DATA.map((c, i) => createCommentCard(c, i)).join('');
-}
-
-function createCommentCard(c, delay) {
-  const sentimentEmoji = { pos: '✅', neg: '❌', neu: '💬' }[c.sentiment] || '💬';
-  return `
-    <article class="comment-card reveal" id="comment-${c.id}" 
-             style="animation-delay: ${delay * 0.08}s"
+  grid.innerHTML = COMMENTS_DATA.map((c, i) => `
+    <article class="comment-card reveal" id="comment-${c.id}"
+             style="animation-delay:${i * 0.08}s"
              aria-label="Comentario de ${c.user}">
       <div class="comment-header">
         <div class="comment-avatar" aria-hidden="true">${c.avatar}</div>
         <div class="comment-user">
           <div class="comment-name">${c.user}</div>
-          <div class="comment-platform">${sentimentEmoji} ${c.platform}</div>
+          <div class="comment-platform">${{ pos:'✅', neg:'❌', neu:'💬' }[c.sentiment]} ${c.platform}</div>
         </div>
       </div>
       <p class="comment-text">${c.text}</p>
@@ -549,20 +483,19 @@ function createCommentCard(c, delay) {
         <span class="comment-likes">❤ ${c.likes.toLocaleString()}</span>
       </div>
     </article>
-  `.trim();
+  `).join('');
 }
 
 // ============================================================
 // FILTERS
 // ============================================================
 function initFilters() {
-  const btns = $$('.filter-btn');
-  btns.forEach(btn => {
+  $$('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      btns.forEach(b => b.classList.remove('active'));
+      $$('.filter-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       state.currentFilter = btn.dataset.filter;
-      state.visibleCount = 9;
+      state.visibleCount  = 12;
       renderNews();
     });
   });
@@ -574,37 +507,32 @@ function initFilters() {
 function initSearch() {
   const input = $('search-input');
   if (!input) return;
-
   let timer;
   input.addEventListener('input', () => {
     clearTimeout(timer);
     timer = setTimeout(() => {
-      state.searchQuery = input.value.trim();
-      state.visibleCount = 9;
+      state.searchQuery  = input.value.trim();
+      state.visibleCount = 12;
       renderNews();
     }, 280);
   });
 }
 
 // ============================================================
-// VIEW TOGGLE (Grid / List)
+// VIEW TOGGLE
 // ============================================================
 function initViewToggle() {
   const btnGrid = $('view-grid');
   const btnList = $('view-list');
   if (!btnGrid || !btnList) return;
-
   btnGrid.addEventListener('click', () => {
     state.viewMode = 'grid';
-    btnGrid.classList.add('active');
-    btnList.classList.remove('active');
+    btnGrid.classList.add('active'); btnList.classList.remove('active');
     renderNews();
   });
-
   btnList.addEventListener('click', () => {
     state.viewMode = 'list';
-    btnList.classList.add('active');
-    btnGrid.classList.remove('active');
+    btnList.classList.add('active'); btnGrid.classList.remove('active');
     renderNews();
   });
 }
@@ -615,10 +543,7 @@ function initViewToggle() {
 function initSort() {
   const sel = $('sort-select');
   if (!sel) return;
-  sel.addEventListener('change', () => {
-    state.currentSort = sel.value;
-    renderNews();
-  });
+  sel.addEventListener('change', () => { state.currentSort = sel.value; renderNews(); });
 }
 
 // ============================================================
@@ -626,42 +551,61 @@ function initSort() {
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
   const btn = $('btn-load-more');
-  if (btn) {
-    btn.addEventListener('click', () => {
-      state.visibleCount += 6;
-      renderNews();
-    });
-  }
+  if (btn) btn.addEventListener('click', () => { state.visibleCount += 9; renderNews(); });
 });
 
 // ============================================================
 // THEME TOGGLE
 // ============================================================
 function initThemeToggle() {
-  const btn = $('theme-toggle');
+  const btn  = $('theme-toggle');
   const icon = $('theme-icon');
   if (!btn || !icon) return;
-
-  // Load saved preference
   const saved = localStorage.getItem('arajet-theme');
   if (saved === 'light') {
     document.body.classList.replace('dark-mode', 'light-mode');
-    state.isDark = false;
-    icon.textContent = '🌙';
+    state.isDark = false; icon.textContent = '🌙';
   }
-
   btn.addEventListener('click', () => {
     state.isDark = !state.isDark;
     if (state.isDark) {
       document.body.classList.replace('light-mode', 'dark-mode');
-      icon.textContent = '☀';
-      localStorage.setItem('arajet-theme', 'dark');
+      icon.textContent = '☀'; localStorage.setItem('arajet-theme', 'dark');
     } else {
       document.body.classList.replace('dark-mode', 'light-mode');
-      icon.textContent = '🌙';
-      localStorage.setItem('arajet-theme', 'light');
+      icon.textContent = '🌙'; localStorage.setItem('arajet-theme', 'light');
     }
   });
+}
+
+// ============================================================
+// PARTICLES
+// ============================================================
+function initParticles() {
+  const container = $('hero-particles');
+  if (!container) return;
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left             = `${Math.random() * 100}%`;
+    p.style.width            = `${2 + Math.random() * 3}px`;
+    p.style.height           = p.style.width;
+    p.style.animationDuration = `${8 + Math.random() * 12}s`;
+    p.style.animationDelay   = `${Math.random() * -20}s`;
+    p.style.opacity          = (0.2 + Math.random() * 0.4).toString();
+    if (Math.random() > 0.7) p.style.background = '#00D4FF';
+    container.appendChild(p);
+  }
+}
+
+// ============================================================
+// HEADER SCROLL
+// ============================================================
+function initHeader() {
+  const header = $('site-header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 50);
+  }, { passive: true });
 }
 
 // ============================================================
@@ -670,34 +614,23 @@ function initThemeToggle() {
 function initScrollTop() {
   const btn = $('scroll-top');
   if (!btn) return;
-
   window.addEventListener('scroll', () => {
     btn.classList.toggle('visible', window.scrollY > 500);
   }, { passive: true });
-
-  btn.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+  btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 }
 
 // ============================================================
-// INTERSECTION OBSERVER (reveal on scroll)
+// INTERSECTION OBSERVER
 // ============================================================
 function initIntersectionObserver() {
-  const opts = { threshold: 0.1, rootMargin: '0px 0px -40px 0px' };
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('revealed');
-        observer.unobserve(e.target);
-      }
+      if (e.isIntersecting) { e.target.classList.add('revealed'); observer.unobserve(e.target); }
     });
-  }, opts);
-
-  // Observe stat cards + comment cards
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
   $$('.stat-card, .source-item, .comment-card, .about-card').forEach(el => {
-    el.classList.add('reveal');
-    observer.observe(el);
+    el.classList.add('reveal'); observer.observe(el);
   });
 }
 
@@ -705,34 +638,20 @@ function initIntersectionObserver() {
 // COUNTER ANIMATION
 // ============================================================
 function animateCounters() {
-  const counters = $$('[data-target]');
-  const opts = { threshold: 0.3 };
-
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        countUp(e.target);
-        observer.unobserve(e.target);
-      }
-    });
-  }, opts);
-
-  counters.forEach(c => observer.observe(c));
+    entries.forEach(e => { if (e.isIntersecting) { countUp(e.target); observer.unobserve(e.target); } });
+  }, { threshold: 0.3 });
+  $$('[data-target]').forEach(c => observer.observe(c));
 }
 
 function countUp(el) {
   const target = parseInt(el.dataset.target, 10);
-  const duration = 1800;
-  const step = 16;
-  const increment = target / (duration / step);
-  let current = 0;
-
-  const timer = setInterval(() => {
-    current += increment;
-    if (current >= target) {
-      current = target;
-      clearInterval(timer);
-    }
+  const step   = 16;
+  const inc    = target / (1800 / step);
+  let current  = 0;
+  const timer  = setInterval(() => {
+    current += inc;
+    if (current >= target) { current = target; clearInterval(timer); }
     el.textContent = Math.floor(current).toLocaleString();
   }, step);
 }
@@ -741,47 +660,36 @@ function countUp(el) {
 // BAR ANIMATION
 // ============================================================
 function animateBars() {
-  const opts = { threshold: 0.3 };
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
-        const bar = e.target;
-        const fill = parseFloat(getComputedStyle(bar).getPropertyValue('--fill'));
-        bar.style.width = `${fill}`;
-        observer.unobserve(bar);
+        const fill = getComputedStyle(e.target).getPropertyValue('--fill');
+        e.target.style.width = fill;
+        observer.unobserve(e.target);
       }
     });
-  }, opts);
-
+  }, { threshold: 0.3 });
   $$('.stat-bar-fill, .source-bar-fill').forEach(b => observer.observe(b));
 }
 
 // ============================================================
-// NAV LINKS (Active on scroll)
+// NAV LINKS active on scroll
 // ============================================================
 function initNavLinks() {
-  const sections = ['noticias', 'estadisticas', 'comentarios', 'acerca'];
   const navLinks = {
-    noticias: $('nav-noticias'),
-    estadisticas: $('nav-stats'),
-    comentarios: $('nav-comentarios'),
-    acerca: $('nav-acerca')
+    noticias: $('nav-noticias'), estadisticas: $('nav-stats'),
+    comentarios: $('nav-comentarios'), acerca: $('nav-acerca')
   };
-
-  const opts = { rootMargin: '-40% 0px -40% 0px', threshold: 0 };
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
-        const id = e.target.id;
         Object.values(navLinks).forEach(l => l && l.classList.remove('active'));
-        if (navLinks[id]) navLinks[id].classList.add('active');
+        if (navLinks[e.target.id]) navLinks[e.target.id].classList.add('active');
       }
     });
-  }, opts);
-
-  sections.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) observer.observe(el);
+  }, { rootMargin: '-40% 0px -40% 0px' });
+  ['noticias','estadisticas','comentarios','acerca'].forEach(id => {
+    const el = document.getElementById(id); if (el) observer.observe(el);
   });
 }
 
@@ -789,19 +697,39 @@ function initNavLinks() {
 // HELPERS
 // ============================================================
 function formatDate(dateStr) {
-  const date = new Date(dateStr);
-  const now  = new Date();
-  const diffMs = now - date;
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  if (!dateStr) return 'Reciente';
+  const date    = new Date(dateStr);
+  if (isNaN(date)) return 'Reciente';
+  const now     = new Date();
+  const diffMs  = now - date;
+  const diffMin = Math.floor(diffMs / 60000);
+  const diffH   = Math.floor(diffMs / 3600000);
+  const diffD   = Math.floor(diffMs / 86400000);
 
-  if (diffDays === 0) return 'Hoy';
-  if (diffDays === 1) return 'Ayer';
-  if (diffDays < 7) return `Hace ${diffDays} días`;
-  if (diffDays < 30) return `Hace ${Math.floor(diffDays / 7)} semanas`;
+  if (diffMin < 60)  return `Hace ${diffMin} min`;
+  if (diffH < 24)    return `Hace ${diffH} h`;
+  if (diffD === 1)   return 'Ayer';
+  if (diffD < 7)     return `Hace ${diffD} días`;
+  if (diffD < 30)    return `Hace ${Math.floor(diffD / 7)} semanas`;
+  return date.toLocaleDateString('es-DO', { day: 'numeric', month: 'short', year: 'numeric' });
+}
 
-  return date.toLocaleDateString('es-DO', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric'
-  });
+function stripHTML(html) {
+  return html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function decodeHTML(str) {
+  return str
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&apos;/g, "'");
+}
+
+function escapeHTML(str) {
+  return String(str)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function escapeAttr(str) {
+  return String(str || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }

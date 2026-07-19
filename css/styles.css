@@ -1374,3 +1374,91 @@ ul { list-style: none; }
   .brand-sub { display: none; }
   .stats-grid { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   SKELETON LOADER
+   ============================================================ */
+.skeleton {
+  background: linear-gradient(90deg,
+    var(--bg-surface-2) 25%,
+    var(--bg-card-hover) 50%,
+    var(--bg-surface-2) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-img   { width: 100%; aspect-ratio: 16/9; border-radius: 0; }
+.skeleton-tag   { height: 20px; width: 80px; margin-bottom: var(--space-sm); }
+.skeleton-title { height: 18px; width: 90%; margin-bottom: 8px; }
+.skeleton-title.short { width: 65%; }
+.skeleton-text  { height: 13px; width: 100%; margin-bottom: 6px; }
+
+.skeleton-card {
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* ============================================================
+   CARD READ OVERLAY (hover)
+   ============================================================ */
+.card-img-wrap {
+  position: relative;
+}
+
+.card-read-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 107, 43, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--transition-med);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 15px;
+  color: white;
+  letter-spacing: 0.5px;
+}
+
+.news-card:hover .card-read-overlay {
+  opacity: 1;
+}
+
+/* ============================================================
+   BTN READ MORE (per card)
+   ============================================================ */
+.btn-read-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: var(--space-sm);
+  padding: 7px 16px;
+  background: transparent;
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  width: 100%;
+  justify-content: center;
+}
+
+.btn-read-more:hover {
+  background: var(--color-primary);
+  color: white;
+  box-shadow: 0 4px 16px rgba(255, 107, 43, 0.3);
+}
+
+/* Clickable cursor on cards */
+.news-card[data-url] {
+  cursor: pointer;
+}
