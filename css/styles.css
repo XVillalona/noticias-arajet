@@ -336,6 +336,10 @@ ul { list-style: none; }
   align-items: start;
 }
 
+.main-content {
+  min-width: 0;
+}
+
 @media (max-width: 1024px) {
   .page-grid { grid-template-columns: 1fr; }
   .sidebar { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-lg); }
@@ -411,7 +415,12 @@ ul { list-style: none; }
 /* ============================================================
    NEWS CARDS
    ============================================================ */
-.news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-md); }
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-md);
+  align-items: stretch;
+}
 .news-grid.list-view { grid-template-columns: 1fr; }
 
 .news-card {
@@ -419,6 +428,9 @@ ul { list-style: none; }
   border-radius: var(--radius-md); overflow: hidden;
   transition: all var(--transition-med); cursor: pointer;
   box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 .news-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: var(--border-primary); }
 
@@ -760,9 +772,13 @@ ul { list-style: none; }
 .comments-filter-bar {
   display: flex; gap: 6px; padding: var(--space-sm) var(--space-md);
   background: var(--bg-surface-2); border-bottom: 1px solid var(--border-color);
-  flex-wrap: wrap;
+  overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; -ms-overflow-style: none;
 }
+.comments-filter-bar::-webkit-scrollbar { display: none; }
+
 .c-filter-btn {
+  flex-shrink: 0;
   padding: 5px 12px; background: var(--bg-surface); border: 1px solid var(--border-color);
   border-radius: var(--radius-pill); font-size: 11px; font-weight: 600;
   color: var(--text-secondary); transition: all var(--transition-fast);
